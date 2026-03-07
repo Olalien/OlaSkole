@@ -1,14 +1,12 @@
-<!DOCTYPE html>
-<html lang="no">
-<head>
+<html lang="no"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OlaSkole – Interaktiv læringsplattform</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&amp;family=Fredoka+One&amp;display=swap" rel="stylesheet">
 <!-- Preload file-parsing libraries -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer=""></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js" defer=""></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" defer=""></script>
 <style>
   :root {
     --c1:#FF6B6B;--c2:#FFD93D;--c3:#6BCB77;--c4:#4D96FF;--c5:#C77DFF;
@@ -545,23 +543,23 @@
   .mc-edit-btn:hover { background: var(--c4); color: white; border-color: var(--c4); transform: scale(1.1); }
   body.dark .mc-edit-btn { background: rgba(30,30,48,0.92); border-color: rgba(255,255,255,0.15); color: white; }
 </style>
-</head>
+<style id="confettiStyle">@keyframes confettiFall{to{transform:translateY(110vh) rotate(720deg);opacity:0;}}</style></head>
 <body>
 
-<div class="progress-top"><div class="progress-fill" id="progressFill"></div></div>
+<div class="progress-top"><div class="progress-fill" id="progressFill" style="width: 90%;"></div></div>
 
 <nav>
   <div class="logo" onclick="showView('home')" style="cursor:pointer;" title="Tilbake til hjem">Ola<span>Skole</span></div>
   <div class="nav-tabs">
-    <button class="nav-tab active" onclick="showView('home')">🏠 Hjem</button>
+    <button class="nav-tab" onclick="showView('home')">🏠 Hjem</button>
     <button class="nav-tab" onclick="showView('tasks')" id="tasksTab">📚 Oppgaver</button>
-    <button class="nav-tab" onclick="showView('join')" id="quizNavBtn" style="background:linear-gradient(135deg,var(--c5),#a855f7);color:white;">🎮 Quiz</button>
+    <button class="nav-tab active" onclick="showView('join')" id="quizNavBtn" style="background:linear-gradient(135deg,var(--c5),#a855f7);color:white;">🎮 Quiz</button>
     <button class="nav-tab" onclick="arbOpen()" id="arbNavBtn" style="background:linear-gradient(135deg,var(--c3),#22c55e);color:white;">📚 Arbeid</button>
-    <button class="nav-tab teacher-tab" onclick="checkTeacher()" style="display:none">🖊️ Lærerrom</button>
-    <button class="nav-tab teacher-tab" onclick="openSettings()" style="display:none;position:relative;">⚙️ Innstillinger<span id="dbNavPill" style="position:absolute;top:4px;right:6px;width:9px;height:9px;border-radius:50%;background:#f59e0b;display:none;font-size:0;border:2px solid white;" title="Database: ikke konfigurert"></span></button>
+    <button class="nav-tab teacher-tab" onclick="checkTeacher()" style="display: inline-flex;">🖊️ Lærerrom</button>
+    <button class="nav-tab teacher-tab" onclick="openSettings()" style="display: inline-flex; position: relative;">⚙️ Innstillinger<span id="dbNavPill" style="position: absolute; top: 4px; right: 6px; width: 9px; height: 9px; border-radius: 50%; background: rgb(5, 150, 105); display: inline-block; font-size: 0px; border: 2px solid white;" title="Database: Supabase tilkoblet"></span></button>
   </div>
   <div class="nav-right">
-    <div class="role-badge" id="roleBadge">👤 Gjest</div>
+    <div class="role-badge" id="roleBadge">🖊️ Lærer</div>
     <button class="dark-toggle" id="darkToggle" onclick="toggleDark()" title="Mørkt modus">🌙</button>
     <button class="teacher-btn" onclick="openTeacherModal()">🔑 Lærer</button>
   </div>
@@ -570,7 +568,7 @@
 <!-- MOBILE BOTTOM NAV -->
 <nav class="mobile-nav" id="mobileNav">
   <div class="mobile-nav-inner">
-    <button class="mob-nav-btn active" id="mob-home" onclick="mobNav('home')">
+    <button class="mob-nav-btn" id="mob-home" onclick="mobNav('home')">
       <span class="mob-icon">🏠</span>Hjem
     </button>
     <button class="mob-nav-btn" id="mob-tasks" onclick="mobNav('tasks')">
@@ -582,14 +580,14 @@
     <button class="mob-nav-btn" id="mob-join" onclick="showView('join')">
       <span class="mob-icon">🎮</span>Quiz
     </button>
-    <button class="mob-nav-btn teacher-tab" id="mob-teacher" onclick="checkTeacher()" style="display:none">
+    <button class="mob-nav-btn teacher-tab active" id="mob-teacher" onclick="checkTeacher()" style="display: inline-flex;">
       <span class="mob-icon">🖊️</span>Lærer
     </button>
   </div>
 </nav>
 
 <!-- HOME VIEW -->
-<div class="view active" id="view-home">
+<div class="view" id="view-home">
 
   <!-- Hero banner -->
   <div class="home-hero">
@@ -612,38 +610,45 @@
 
   <!-- Login / welcome card -->
   <div style="max-width:440px;margin:0 auto 1.75rem;">
-    <div class="student-login-box" id="studentLoginBox">
+    <div class="student-login-box" id="studentLoginBox" style="display: none;">
       <h2>👋 Hvem er du?</h2>
-      <input type="text" id="studentName" placeholder="Ditt navn" />
-      <input type="text" id="studentClass" placeholder="Klasse (f.eks. 9B)" />
+      <input type="text" id="studentName" placeholder="Ditt navn">
+      <input type="text" id="studentClass" placeholder="Klasse (f.eks. 9B)">
       <button class="btn-primary" style="width:100%;margin-top:0.25rem;" onclick="studentLogin()">Start læring! 🚀</button>
     </div>
 
-    <div id="welcomeBack" style="display:none;">
+    <div id="welcomeBack" style="display: block;">
       <div class="welcome-back-card">
         <div style="font-size:2.2rem;margin-bottom:0.4rem;">👋</div>
-        <div style="font-family:'Fredoka One',cursive;font-size:1.35rem;margin-bottom:0.1rem;" id="welcomeName"></div>
-        <div style="font-size:0.88rem;opacity:0.8;" id="welcomeClass"></div>
+        <div style="font-family:'Fredoka One',cursive;font-size:1.35rem;margin-bottom:0.1rem;" id="welcomeName">Hei, test! 👋</div>
+        <div style="font-size:0.88rem;opacity:0.8;" id="welcomeClass">9A</div>
         <div id="studentProgressWrap" style="margin-top:0.75rem;background:rgba(255,255,255,0.2);border-radius:50px;height:8px;overflow:hidden;"><div id="studentProgressBar" style="height:100%;background:var(--c2);border-radius:50px;width:0%;transition:width 0.6s ease;"></div></div>
-        <div id="studentProgressLabel" style="font-size:0.75rem;opacity:0.75;margin-top:0.3rem;font-weight:700;"></div>
+        <div id="studentProgressLabel" style="font-size:0.75rem;opacity:0.75;margin-top:0.3rem;font-weight:700;">0% fullført (0/6 aktiviteter)</div>
         <button onclick="studentLogout()" style="margin-top:0.75rem;background:rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.4);color:white;padding:6px 16px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.8rem;cursor:pointer;">Bytt bruker</button>
       </div>
     </div>
   </div>
 
-  <div class="badge-area" id="badgeArea" style="display:none; justify-content:center;"></div>
+  <div class="badge-area" id="badgeArea" style="display: flex; justify-content: center;"><div class="badge earned"><span class="badge-icon">⭐</span>Første svar!</div></div>
 
   <!-- Module search + grid -->
   <div id="homeModules">
     <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.1rem;flex-wrap:wrap;">
       <div class="section-title" style="margin-bottom:0;flex:1;">📖 Emner</div>
       <div style="position:relative;">
-        <input type="text" id="moduleSearch" placeholder="🔍 Søk emner..." oninput="filterHomeModules()" style="padding:8px 14px 8px 14px;border:2px solid #e0e0e0;border-radius:50px;font-family:'Nunito',sans-serif;font-size:0.88rem;outline:none;width:180px;transition:border 0.2s;" onfocus="this.style.borderColor='var(--c4)'" onblur="this.style.borderColor='#e0e0e0'" />
+        <input type="text" id="moduleSearch" placeholder="🔍 Søk emner..." oninput="filterHomeModules()" style="padding:8px 14px 8px 14px;border:2px solid #e0e0e0;border-radius:50px;font-family:'Nunito',sans-serif;font-size:0.88rem;outline:none;width:180px;transition:border 0.2s;" onfocus="this.style.borderColor='var(--c4)'" onblur="this.style.borderColor='#e0e0e0'">
       </div>
     </div>
     <div id="subjectFilter" style="display:flex;gap:0.45rem;flex-wrap:wrap;margin-bottom:1rem;"></div>
-    <div class="modules-grid" id="homeModulesGrid"></div>
-    <div class="empty-state" id="homeEmpty">
+    <div class="modules-grid" id="homeModulesGrid"><div class="module-card color-1" style="position:relative;" onclick="openModule(0)" data-module-name="Demokrati og samfunn" data-module-subject="🗳️">
+      <button class="mc-edit-btn" onclick="event.stopPropagation();quickEditModule(0)" title="Rediger">✏️</button>
+      <span class="mc-emoji">🗳️</span>
+      <h3>Demokrati og samfunn</h3>
+      <p>Hva er demokrati, og hvordan fungerer det?</p>
+      <span class="task-count">11 oppgaver</span>
+      
+    </div></div>
+    <div class="empty-state" id="homeEmpty" style="display: none;">
       <span class="es-icon">📭</span>
       <h3>Ingen emner ennå</h3>
       <p>Læreren din har ikke lagt inn noe innhold ennå.</p>
@@ -655,7 +660,13 @@
 <div class="view" id="view-tasks">
   <div id="moduleList">
     <div class="section-title">📚 Alle emner</div>
-    <div class="modules-grid" id="taskModulesGrid"></div>
+    <div class="modules-grid" id="taskModulesGrid"><div class="module-card color-1" style="position:relative;" onclick="openModule(0)">
+      <button class="mc-edit-btn" onclick="event.stopPropagation();quickEditModule(0)" title="Rediger">✏️</button>
+      <span class="mc-emoji">🗳️</span>
+      <h3>Demokrati og samfunn</h3>
+      <p>Hva er demokrati, og hvordan fungerer det?</p>
+      <span class="task-count">11 oppgaver</span>
+    </div></div>
     <div class="empty-state" id="taskEmpty" style="display:none">
       <span class="es-icon">📭</span>
       <h3>Ingen emner ennå</h3>
@@ -676,14 +687,14 @@
 </div>
 
 <!-- TEACHER VIEW -->
-<div class="view" id="view-teacher">
+<div class="view active" id="view-teacher">
   <div class="tr-header">
     <div class="section-title" style="margin-bottom:0;">⚙️ Lærerrom</div>
     <div class="tr-tabs">
-      <button class="tr-tab active" id="trtab-new"    onclick="trTab('new')">➕ Nytt emne</button>
-      <button class="tr-tab"        id="trtab-emner"  onclick="trTab('emner')">📦 Emner</button>
-      <button class="tr-tab"        id="trtab-results" onclick="trTab('results')">📊 Resultater</button>
-      <button class="tr-tab"        id="trtab-klasser" onclick="trTab('klasser')">🏫 Klasser</button>
+      <button class="tr-tab active" id="trtab-new" onclick="trTab('new')">➕ Nytt emne</button>
+      <button class="tr-tab" id="trtab-emner" onclick="trTab('emner')">📦 Emner</button>
+      <button class="tr-tab" id="trtab-results" onclick="trTab('results')">📊 Resultater</button>
+      <button class="tr-tab" id="trtab-klasser" onclick="trTab('klasser')">🏫 Klasser</button>
     </div>
   </div>
 
@@ -708,15 +719,15 @@
       <div style="display:grid;grid-template-columns:1fr 1fr 80px;gap:0.875rem;margin-bottom:0.875rem;flex-wrap:wrap;" class="form-grid-3">
         <div class="form-row" style="margin:0">
           <label>Emnenavn</label>
-          <input type="text" id="moduleName" placeholder="f.eks. Andre verdenskrig" oninput="updatePublishBarHint()" />
+          <input type="text" id="moduleName" placeholder="f.eks. Andre verdenskrig" oninput="updatePublishBarHint()">
         </div>
         <div class="form-row" style="margin:0">
           <label>Kort beskrivelse</label>
-          <input type="text" id="moduleDesc" placeholder="Hva handler emnet om?" />
+          <input type="text" id="moduleDesc" placeholder="Hva handler emnet om?">
         </div>
         <div class="form-row" style="margin:0">
           <label>Ikon</label>
-          <input type="text" id="moduleEmoji" placeholder="📚" maxlength="2" value="📚" />
+          <input type="text" id="moduleEmoji" placeholder="📚" maxlength="2" value="📚">
         </div>
       </div>
       <div class="form-row" style="margin:0">
@@ -739,7 +750,7 @@
             <label style="display:block;font-weight:800;font-size:0.78rem;opacity:0.7;margin-bottom:0.35rem;text-transform:uppercase;letter-spacing:0.5px;">🎓 Klassetrinn</label>
             <select id="aiClass" style="width:100%;padding:9px 11px;border-radius:10px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.88rem;background:#2d2d44;color:white;outline:none;">
               <option value="8. trinn">8. trinn</option>
-              <option value="9. trinn" selected>9. trinn</option>
+              <option value="9. trinn" selected="">9. trinn</option>
               <option value="10. trinn">10. trinn</option>
               <option value="8–10. trinn">8–10. trinn</option>
             </select>
@@ -748,7 +759,7 @@
             <label style="display:block;font-weight:800;font-size:0.78rem;opacity:0.7;margin-bottom:0.35rem;text-transform:uppercase;letter-spacing:0.5px;">⚡ Vanskelighetsgrad</label>
             <select id="aiDifficulty" style="width:100%;padding:9px 11px;border-radius:10px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.88rem;background:#2d2d44;color:white;outline:none;">
               <option value="enkel">🟢 Enkel</option>
-              <option value="middels" selected>🟡 Middels</option>
+              <option value="middels" selected="">🟡 Middels</option>
               <option value="krevende">🔴 Krevende</option>
             </select>
           </div>
@@ -756,7 +767,7 @@
             <label style="display:block;font-weight:800;font-size:0.78rem;opacity:0.7;margin-bottom:0.35rem;text-transform:uppercase;letter-spacing:0.5px;">❓ Quiz-spørsmål</label>
             <select id="aiQuizCount" style="width:100%;padding:9px 11px;border-radius:10px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.88rem;background:#2d2d44;color:white;outline:none;">
               <option value="0">0</option><option value="1">1</option><option value="2">2</option>
-              <option value="3" selected>3</option><option value="4">4</option><option value="5">5</option>
+              <option value="3" selected="">3</option><option value="4">4</option><option value="5">5</option>
               <option value="6">6</option><option value="8">8</option><option value="10">10</option>
               <option value="12">12</option><option value="15">15</option><option value="20">20</option><option value="30">30</option>
             </select>
@@ -765,21 +776,21 @@
             <label style="display:block;font-weight:800;font-size:0.78rem;opacity:0.7;margin-bottom:0.35rem;text-transform:uppercase;letter-spacing:0.5px;">🃏 Flashcards</label>
             <select id="aiFcCount" style="width:100%;padding:9px 11px;border-radius:10px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.88rem;background:#2d2d44;color:white;outline:none;">
               <option value="0">0</option><option value="2">2</option><option value="3">3</option>
-              <option value="4" selected>4</option><option value="5">5</option><option value="6">6</option>
+              <option value="4" selected="">4</option><option value="5">5</option><option value="6">6</option>
               <option value="8">8</option><option value="10">10</option><option value="15">15</option><option value="20">20</option>
             </select>
           </div>
           <div>
             <label style="display:block;font-weight:800;font-size:0.78rem;opacity:0.7;margin-bottom:0.35rem;text-transform:uppercase;letter-spacing:0.5px;">💬 Drøftingsspm.</label>
             <select id="aiDiscCount" style="width:100%;padding:9px 11px;border-radius:10px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.88rem;background:#2d2d44;color:white;outline:none;">
-              <option value="0">0</option><option value="1" selected>1</option><option value="2">2</option>
+              <option value="0">0</option><option value="1" selected="">1</option><option value="2">2</option>
               <option value="3">3</option><option value="4">4</option><option value="5">5</option>
             </select>
           </div>
           <div>
             <label style="display:block;font-weight:800;font-size:0.78rem;opacity:0.7;margin-bottom:0.35rem;text-transform:uppercase;letter-spacing:0.5px;">✍️ Skriveoppgave</label>
             <select id="aiWriteTask" style="width:100%;padding:9px 11px;border-radius:10px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.88rem;background:#2d2d44;color:white;outline:none;">
-              <option value="ja" selected>✅ Ja</option>
+              <option value="ja" selected="">✅ Ja</option>
               <option value="nei">❌ Nei</option>
             </select>
           </div>
@@ -791,11 +802,8 @@
         <div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:1rem;">
           <label style="display:block;font-weight:800;font-size:0.78rem;opacity:0.7;margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:0.5px;">📚 Fag / tema (valgfritt)</label>
           <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.75rem;">
-            <input type="text" id="aiSubjectFree" placeholder="F.eks. Naturfag, Norsk, Fotball, Minecraft…"
-              style="flex:1;min-width:180px;padding:9px 11px;border-radius:10px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.88rem;background:#2d2d44;color:white;outline:none;"
-              oninput="syncAiSubjectFree(this.value)" />
-            <select id="aiSubject" onchange="updateCompetenceGoals();syncAiSubjectFromSelect(this.value)"
-              style="flex:1;min-width:140px;padding:9px 11px;border-radius:10px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.88rem;background:#2d2d44;color:white;outline:none;">
+            <input type="text" id="aiSubjectFree" placeholder="F.eks. Naturfag, Norsk, Fotball, Minecraft…" style="flex:1;min-width:180px;padding:9px 11px;border-radius:10px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.88rem;background:#2d2d44;color:white;outline:none;" oninput="syncAiSubjectFree(this.value)">
+            <select id="aiSubject" onchange="updateCompetenceGoals();syncAiSubjectFromSelect(this.value)" style="flex:1;min-width:140px;padding:9px 11px;border-radius:10px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.88rem;background:#2d2d44;color:white;outline:none;">
               <option value="">— Eller velg skolefag —</option>
               <option value="norsk">Norsk</option><option value="matematikk">Matematikk</option>
               <option value="engelsk">Engelsk</option><option value="naturfag">Naturfag</option>
@@ -807,7 +815,7 @@
           </div>
           <div id="aiGoalRow" style="margin-bottom:0.75rem;">
             <label style="display:block;font-weight:800;font-size:0.78rem;opacity:0.7;margin-bottom:0.35rem;text-transform:uppercase;letter-spacing:0.5px;">🎯 Kompetansemål (valgfritt)</label>
-            <select id="aiGoalSelect" style="width:100%;padding:9px 11px;border-radius:10px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.85rem;background:#2d2d44;color:white;outline:none;" disabled>
+            <select id="aiGoalSelect" style="width:100%;padding:9px 11px;border-radius:10px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.85rem;background:#2d2d44;color:white;outline:none;" disabled="">
               <option value="">— Velg skolefag over for å se kompetansemål —</option>
             </select>
           </div>
@@ -822,17 +830,13 @@
 
       <!-- File upload row -->
       <div style="margin-bottom:1.1rem;">
-        <div id="dropZoneFile" onclick="document.getElementById('fileUploadInput').click()"
-          style="border:2px dashed rgba(255,255,255,0.25);border-radius:14px;padding:1.1rem 1.5rem;cursor:pointer;background:rgba(255,255,255,0.06);transition:all 0.2s;display:flex;align-items:center;gap:1rem;"
-          ondragover="event.preventDefault();this.style.background='rgba(255,255,255,0.12)'"
-          ondragleave="this.style.background='rgba(255,255,255,0.06)'"
-          ondrop="handleFileDrop(event)">
+        <div id="dropZoneFile" onclick="document.getElementById('fileUploadInput').click()" style="border:2px dashed rgba(255,255,255,0.25);border-radius:14px;padding:1.1rem 1.5rem;cursor:pointer;background:rgba(255,255,255,0.06);transition:all 0.2s;display:flex;align-items:center;gap:1rem;" ondragover="event.preventDefault();this.style.background='rgba(255,255,255,0.12)'" ondragleave="this.style.background='rgba(255,255,255,0.06)'" ondrop="handleFileDrop(event)">
           <span style="font-size:2rem;" id="dropIcon">📄</span>
           <div>
             <div style="font-weight:800;color:white;font-size:0.95rem;" id="dropLabel">Last opp dokument</div>
             <div style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-top:0.15rem;">PDF · DOCX · PPTX · TXT — maks 10 MB</div>
           </div>
-          <input type="file" id="fileUploadInput" accept=".pdf,.docx,.pptx,.txt,.doc" style="display:none" onchange="handleFileSelect(event)" />
+          <input type="file" id="fileUploadInput" accept=".pdf,.docx,.pptx,.txt,.doc" style="display:none" onchange="handleFileSelect(event)">
         </div>
         <div id="fileStatus" style="display:none;margin-top:0.6rem;padding:10px 14px;border-radius:10px;font-weight:700;font-size:0.88rem;"></div>
         <div id="filePreviewBox" style="display:none;margin-top:0.6rem;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);border-radius:12px;padding:0.875rem;">
@@ -871,12 +875,12 @@
 
       <!-- Task category tab bar -->
       <div class="task-cat-tabs" id="taskCatTabs">
-        <button class="task-cat-btn active" id="tcbtn-quiz"  onclick="tcTab('quiz')">❓ Quiz</button>
-        <button class="task-cat-btn"        id="tcbtn-disc"  onclick="tcTab('disc')">💬 Drøfting</button>
-        <button class="task-cat-btn"        id="tcbtn-write" onclick="tcTab('write')">✍️ Skriving</button>
-        <button class="task-cat-btn"        id="tcbtn-video" onclick="tcTab('video')">🎬 Video</button>
-        <button class="task-cat-btn"        id="tcbtn-fc"    onclick="tcTab('fc')">🃏 Flashcards</button>
-        <button class="task-cat-btn"        id="tcbtn-preview" onclick="tcTab('preview')">👁 Forhåndsvisning</button>
+        <button class="task-cat-btn active" id="tcbtn-quiz" onclick="tcTab('quiz')">❓ Quiz</button>
+        <button class="task-cat-btn" id="tcbtn-disc" onclick="tcTab('disc')">💬 Drøfting</button>
+        <button class="task-cat-btn" id="tcbtn-write" onclick="tcTab('write')">✍️ Skriving</button>
+        <button class="task-cat-btn" id="tcbtn-video" onclick="tcTab('video')">🎬 Video</button>
+        <button class="task-cat-btn" id="tcbtn-fc" onclick="tcTab('fc')">🃏 Flashcards</button>
+        <button class="task-cat-btn" id="tcbtn-preview" onclick="tcTab('preview')">👁 Forhåndsvisning</button>
       </div>
 
       <!-- QUIZ TAB -->
@@ -884,7 +888,7 @@
         <div class="ai-mini-box" style="background:linear-gradient(135deg,#f5f3ff,#eff6ff);border-color:#e9d5ff;">
           <div style="font-weight:800;font-size:0.92rem;color:var(--dark);margin-bottom:0.6rem;">✨ La AI lage et spørsmål</div>
           <div style="display:flex;gap:0.6rem;flex-wrap:wrap;align-items:flex-end;">
-            <input type="text" id="aiQuizTopic" placeholder="Tema eller stikkord, f.eks. «fotosyntese»" style="flex:1;min-width:160px;padding:9px 12px;border:2px solid #e0e0e0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.92rem;outline:none;" />
+            <input type="text" id="aiQuizTopic" placeholder="Tema eller stikkord, f.eks. «fotosyntese»" style="flex:1;min-width:160px;padding:9px 12px;border:2px solid #e0e0e0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.92rem;outline:none;">
             <button class="btn-ai" style="padding:9px 18px;font-size:0.88rem;" onclick="aiGenerateSingleQuiz()">
               <span>✨ Lag spørsmål</span><div class="ai-spinner" id="sqSpinner"></div>
             </button>
@@ -893,12 +897,12 @@
         </div>
         <div class="or-divider">— eller fyll inn manuelt —</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;" class="form-grid-2">
-          <div class="form-row" style="margin:0;grid-column:1/-1"><label>Spørsmål</label><input type="text" id="quizQ" placeholder="Hva er..." /></div>
-          <div class="form-row" style="margin:0"><label>✅ Svar A (riktig)</label><input type="text" id="quizA" placeholder="Riktig svar" /></div>
-          <div class="form-row" style="margin:0"><label>❌ Svar B</label><input type="text" id="quizB" placeholder="Feil svar" /></div>
-          <div class="form-row" style="margin:0"><label>❌ Svar C</label><input type="text" id="quizC" placeholder="Feil svar" /></div>
-          <div class="form-row" style="margin:0"><label>❌ Svar D</label><input type="text" id="quizD" placeholder="Feil svar" /></div>
-          <div class="form-row" style="margin:0;grid-column:1/-1"><label>Forklaring ved riktig svar</label><input type="text" id="quizExplain" placeholder="Bra! Det er riktig fordi..." /></div>
+          <div class="form-row" style="margin:0;grid-column:1/-1"><label>Spørsmål</label><input type="text" id="quizQ" placeholder="Hva er..."></div>
+          <div class="form-row" style="margin:0"><label>✅ Svar A (riktig)</label><input type="text" id="quizA" placeholder="Riktig svar"></div>
+          <div class="form-row" style="margin:0"><label>❌ Svar B</label><input type="text" id="quizB" placeholder="Feil svar"></div>
+          <div class="form-row" style="margin:0"><label>❌ Svar C</label><input type="text" id="quizC" placeholder="Feil svar"></div>
+          <div class="form-row" style="margin:0"><label>❌ Svar D</label><input type="text" id="quizD" placeholder="Feil svar"></div>
+          <div class="form-row" style="margin:0;grid-column:1/-1"><label>Forklaring ved riktig svar</label><input type="text" id="quizExplain" placeholder="Bra! Det er riktig fordi..."></div>
         </div>
         <button class="btn-success" style="margin-top:0.875rem;" onclick="addQuizQuestion()">✅ Legg til spørsmål</button>
         <div id="quizPreview" style="margin-top:0.875rem;"></div>
@@ -909,7 +913,7 @@
         <div class="ai-mini-box" style="background:linear-gradient(135deg,#fdf4ff,#fce7ff);border-color:#f0abfc;">
           <div style="font-weight:800;font-size:0.92rem;color:var(--dark);margin-bottom:0.6rem;">✨ La AI foreslå drøftingsspørsmål</div>
           <div style="display:flex;gap:0.6rem;flex-wrap:wrap;align-items:flex-end;">
-            <input type="text" id="aiDiscTopic" placeholder="Tema, f.eks. «klimaendringer»" style="flex:1;min-width:160px;padding:9px 12px;border:2px solid #e0e0e0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.92rem;outline:none;" />
+            <input type="text" id="aiDiscTopic" placeholder="Tema, f.eks. «klimaendringer»" style="flex:1;min-width:160px;padding:9px 12px;border:2px solid #e0e0e0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.92rem;outline:none;">
             <button style="background:linear-gradient(135deg,var(--c5),#a855f7);color:white;border:none;padding:9px 18px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.88rem;cursor:pointer;display:flex;align-items:center;gap:0.4rem;" onclick="aiGenerateSingleDisc()">
               <span>✨ Foreslå</span><div class="ai-spinner" id="sdSpinner"></div>
             </button>
@@ -927,7 +931,7 @@
         <div class="ai-mini-box" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-color:#86efac;">
           <div style="font-weight:800;font-size:0.92rem;color:var(--dark);margin-bottom:0.6rem;">✨ La AI lage en skriveoppgave</div>
           <div style="display:flex;gap:0.6rem;flex-wrap:wrap;align-items:flex-end;">
-            <input type="text" id="aiWriteTopic" placeholder="Tema, f.eks. «klimaendringer og eget ansvar»" style="flex:1;min-width:160px;padding:9px 12px;border:2px solid #e0e0e0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.92rem;outline:none;" />
+            <input type="text" id="aiWriteTopic" placeholder="Tema, f.eks. «klimaendringer og eget ansvar»" style="flex:1;min-width:160px;padding:9px 12px;border:2px solid #e0e0e0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.92rem;outline:none;">
             <button style="background:linear-gradient(135deg,var(--c3),#16a34a);color:white;border:none;padding:9px 18px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.88rem;cursor:pointer;display:flex;align-items:center;gap:0.4rem;" onclick="aiGenerateWriteTask()">
               <span>✨ Lag oppgave</span><div class="ai-spinner" id="swSpinner"></div>
             </button>
@@ -935,9 +939,9 @@
           <div id="swResult" style="display:none;margin-top:0.6rem;"></div>
         </div>
         <div class="or-divider">— eller fyll inn manuelt —</div>
-        <div class="form-row"><label>Oppgavetittel</label><input type="text" id="writeTitle" placeholder="Skriv et..." /></div>
+        <div class="form-row"><label>Oppgavetittel</label><input type="text" id="writeTitle" placeholder="Skriv et..."></div>
         <div class="form-row"><label>Instruksjon til eleven</label><textarea id="writeDesc" placeholder="Skriv minst 150 ord om..."></textarea></div>
-        <div class="form-row"><label>Minimum antall ord</label><input type="number" id="writeMin" placeholder="100" value="100" style="width:120px" /></div>
+        <div class="form-row"><label>Minimum antall ord</label><input type="number" id="writeMin" placeholder="100" value="100" style="width:120px"></div>
         <button class="btn-success" onclick="addWriteTask()">✅ Legg til skriveoppgave</button>
       </div>
 
@@ -947,7 +951,7 @@
           <div style="font-weight:800;font-size:0.92rem;color:var(--dark);margin-bottom:0.4rem;">✨ Finn YouTube-videoer med AI</div>
           <div style="font-size:0.8rem;color:#666;margin-bottom:0.75rem;">AI foreslår relevante videoer med forhåndsvisning – du velger hvilke du vil bruke.</div>
           <div style="display:flex;gap:0.6rem;flex-wrap:wrap;align-items:flex-end;">
-            <input type="text" id="aiVideoTopic" placeholder="Tema, f.eks. «fotosyntese» eller «2. verdenskrig»" style="flex:1;min-width:160px;padding:9px 12px;border:2px solid #e0e0e0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.92rem;outline:none;" />
+            <input type="text" id="aiVideoTopic" placeholder="Tema, f.eks. «fotosyntese» eller «2. verdenskrig»" style="flex:1;min-width:160px;padding:9px 12px;border:2px solid #e0e0e0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.92rem;outline:none;">
             <button style="background:linear-gradient(135deg,var(--c1),#dc2626);color:white;border:none;padding:9px 18px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.88rem;cursor:pointer;display:flex;align-items:center;gap:0.4rem;" onclick="aiGenerateVideo()">
               <span>✨ Finn videoer</span><div class="ai-spinner" id="svSpinner"></div>
             </button>
@@ -957,10 +961,10 @@
         <div class="or-divider">— eller lim inn YouTube-lenke manuelt —</div>
         <div class="form-row">
           <label>YouTube-lenke eller annen URL</label>
-          <input type="text" id="videoUrl" placeholder="https://www.youtube.com/watch?v=..." oninput="previewManualVideo()" />
+          <input type="text" id="videoUrl" placeholder="https://www.youtube.com/watch?v=..." oninput="previewManualVideo()">
         </div>
         <div id="manualVideoPreview" style="display:none;margin-bottom:0.875rem;"></div>
-        <div class="form-row"><label>Tittel på videoen</label><input type="text" id="videoTitle" placeholder="Automatisk hentet fra URL, eller skriv selv..." /></div>
+        <div class="form-row"><label>Tittel på videoen</label><input type="text" id="videoTitle" placeholder="Automatisk hentet fra URL, eller skriv selv..."></div>
         <div class="form-row"><label>Oppgave til elevene (valgfritt)</label><textarea id="videoTask" placeholder="Etter å ha sett videoen, svar på..."></textarea></div>
         <button class="btn-success" onclick="addVideo()">✅ Legg til video</button>
       </div>
@@ -970,7 +974,7 @@
         <div class="ai-mini-box" style="background:linear-gradient(135deg,#fff7ed,#fef3c7);border-color:#fcd34d;">
           <div style="font-weight:800;font-size:0.92rem;color:var(--dark);margin-bottom:0.6rem;">✨ La AI lage flashcards</div>
           <div style="display:flex;gap:0.6rem;flex-wrap:wrap;align-items:flex-end;">
-            <input type="text" id="aiFcTopic" placeholder="Tema, f.eks. «celler og biologi»" style="flex:1;min-width:160px;padding:9px 12px;border:2px solid #e0e0e0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.92rem;outline:none;" />
+            <input type="text" id="aiFcTopic" placeholder="Tema, f.eks. «celler og biologi»" style="flex:1;min-width:160px;padding:9px 12px;border:2px solid #e0e0e0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.92rem;outline:none;">
             <button style="background:linear-gradient(135deg,var(--c2),#f59e0b);color:var(--dark);border:none;padding:9px 18px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.88rem;cursor:pointer;display:flex;align-items:center;gap:0.4rem;" onclick="aiGenerateFlashcards()">
               <span>✨ Lag flashcards</span><div class="ai-spinner" id="fcAiSpinner"></div>
             </button>
@@ -978,8 +982,8 @@
           <div id="fcAiResult" style="display:none;margin-top:0.6rem;"></div>
         </div>
         <div class="or-divider">— eller legg til manuelt —</div>
-        <div class="form-row"><label>Begrep / spørsmål (forside)</label><input type="text" id="fcFront" placeholder="Demokrati" /></div>
-        <div class="form-row"><label>Definisjon / svar (bakside)</label><input type="text" id="fcBack" placeholder="Et styresett der folket bestemmer..." /></div>
+        <div class="form-row"><label>Begrep / spørsmål (forside)</label><input type="text" id="fcFront" placeholder="Demokrati"></div>
+        <div class="form-row"><label>Definisjon / svar (bakside)</label><input type="text" id="fcBack" placeholder="Et styresett der folket bestemmer..."></div>
         <button class="btn-success" onclick="addFlashcard()">✅ Legg til flashcard</button>
         <div id="fcPreview" style="margin-top:0.875rem;"></div>
       </div>
@@ -1008,7 +1012,24 @@
   <div class="tr-pane" id="trpane-emner">
     <div class="teacher-panel">
       <h2>📦 Publiserte emner</h2>
-      <div id="manageModulesList"><p style="color:#aaa;">Ingen emner publisert ennå.</p></div>
+      <div id="manageModulesList">
+    <div class="module-manage-card">
+      <div style="font-size:2rem;flex-shrink:0;">🗳️</div>
+      <div class="module-manage-info">
+        <div class="module-manage-name">Demokrati og samfunn</div>
+        <div class="module-manage-meta">
+          3 quiz · 2 drøfting · 4 flashcards · 1 skriveoppgaver
+          
+          
+          
+        </div>
+      </div>
+      <div class="module-manage-actions">
+        <button class="pv-edit-btn" style="font-size:0.85rem;padding:8px 14px;" onclick="editModule(0)">✏️ Rediger</button>
+        <button onclick="toggleLock(0)" style="background:#f0f0f0;color:#555;border:none;padding:8px 12px;border-radius:7px;font-size:0.82rem;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;">🔒 Lås</button>
+        <button class="pv-del-btn" style="font-size:0.85rem;padding:8px 14px;" onclick="deleteModule(0)">🗑 Slett</button>
+      </div>
+    </div></div>
     </div>
   </div>
 
@@ -1024,8 +1045,86 @@
         <button onclick="exportAllAnswersDocx()" style="background:var(--c4);color:white;border:none;padding:9px 18px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.82rem;cursor:pointer;">📄 Eksporter Word</button>
         <button onclick="exportAllAnswersTxt()" style="background:#22c55e;color:white;border:none;padding:9px 18px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.82rem;cursor:pointer;">📋 Eksporter tekst</button>
       </div>
-      <div id="resultStatsRow" style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1.25rem;"></div>
-      <div id="resultsContainer"><p style="color:#aaa;">Ingen svar registrert ennå.</p></div>
+      <div id="resultStatsRow" style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1.25rem;">
+      <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border-radius:12px;padding:0.875rem 1.25rem;flex:1;min-width:120px;"><div style="font-size:1.6rem;font-weight:800;color:var(--c4);">5</div><div style="font-size:0.78rem;color:#555;font-weight:700;">Elever</div></div>
+      <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-radius:12px;padding:0.875rem 1.25rem;flex:1;min-width:120px;"><div style="font-size:1.6rem;font-weight:800;color:var(--c3);">1</div><div style="font-size:0.78rem;color:#555;font-weight:700;">Emner</div></div>
+      <div style="background:linear-gradient(135deg,#fdf4ff,#fce7ff);border-radius:12px;padding:0.875rem 1.25rem;flex:1;min-width:120px;"><div style="font-size:1.6rem;font-weight:800;color:var(--c5);">4</div><div style="font-size:0.78rem;color:#555;font-weight:700;">Totale svar</div></div></div>
+      <div id="resultsContainer">
+    <div style="border:2px solid #e8eaed;border-radius:14px;margin-bottom:0.75rem;overflow:hidden;">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:0.875rem 1rem;cursor:pointer;background:white;" onclick="toggleStudentResults('sr-test')">
+        <div>
+          <div style="font-weight:800;color:var(--dark);">👤 test</div>
+          <div style="font-size:0.78rem;color:#aaa;">3 svar</div>
+        </div>
+        <div style="display:flex;gap:0.4rem;align-items:center;">
+          <button onclick="event.stopPropagation();exportStudentAnswersTxt('test')" style="background:var(--c4);color:white;border:none;padding:5px 10px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.75rem;cursor:pointer;">📋 txt</button>
+          <span style="color:#aaa;font-size:1rem;">▼</span>
+        </div>
+      </div>
+      <div id="sr-test" style="display:none;padding:0.875rem 1rem;background:#fafafa;border-top:1px solid #f0f0f0;">
+        <div style="font-size:0.85rem;color:#555;padding:0.4rem 0;border-bottom:1px solid #f0f0f0;">write_0: dette er en test</div><div style="font-size:0.85rem;color:#555;padding:0.4rem 0;border-bottom:1px solid #f0f0f0;">quiz_0: false</div><div style="font-size:0.85rem;color:#555;padding:0.4rem 0;border-bottom:1px solid #f0f0f0;">quiz_1: true</div>
+      </div>
+    </div>
+    <div style="border:2px solid #e8eaed;border-radius:14px;margin-bottom:0.75rem;overflow:hidden;">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:0.875rem 1rem;cursor:pointer;background:white;" onclick="toggleStudentResults('sr-Ola')">
+        <div>
+          <div style="font-weight:800;color:var(--dark);">👤 Ola</div>
+          <div style="font-size:0.78rem;color:#aaa;">1 svar</div>
+        </div>
+        <div style="display:flex;gap:0.4rem;align-items:center;">
+          <button onclick="event.stopPropagation();exportStudentAnswersTxt('Ola')" style="background:var(--c4);color:white;border:none;padding:5px 10px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.75rem;cursor:pointer;">📋 txt</button>
+          <span style="color:#aaa;font-size:1rem;">▼</span>
+        </div>
+      </div>
+      <div id="sr-Ola" style="display:none;padding:0.875rem 1rem;background:#fafafa;border-top:1px solid #f0f0f0;">
+        <div style="font-size:0.85rem;color:#555;padding:0.4rem 0;border-bottom:1px solid #f0f0f0;">quiz_0: wrong</div>
+      </div>
+    </div>
+    <div style="border:2px solid #e8eaed;border-radius:14px;margin-bottom:0.75rem;overflow:hidden;">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:0.875rem 1rem;cursor:pointer;background:white;" onclick="toggleStudentResults('sr-Håkon')">
+        <div>
+          <div style="font-weight:800;color:var(--dark);">👤 Håkon</div>
+          <div style="font-size:0.78rem;color:#aaa;">0 svar</div>
+        </div>
+        <div style="display:flex;gap:0.4rem;align-items:center;">
+          <button onclick="event.stopPropagation();exportStudentAnswersTxt('Håkon')" style="background:var(--c4);color:white;border:none;padding:5px 10px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.75rem;cursor:pointer;">📋 txt</button>
+          <span style="color:#aaa;font-size:1rem;">▼</span>
+        </div>
+      </div>
+      <div id="sr-Håkon" style="display:none;padding:0.875rem 1rem;background:#fafafa;border-top:1px solid #f0f0f0;">
+        <p style="color:#aaa;font-size:0.88rem;">Ingen svar ennå.</p>
+      </div>
+    </div>
+    <div style="border:2px solid #e8eaed;border-radius:14px;margin-bottom:0.75rem;overflow:hidden;">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:0.875rem 1rem;cursor:pointer;background:white;" onclick="toggleStudentResults('sr-Twst')">
+        <div>
+          <div style="font-weight:800;color:var(--dark);">👤 Twst</div>
+          <div style="font-size:0.78rem;color:#aaa;">0 svar</div>
+        </div>
+        <div style="display:flex;gap:0.4rem;align-items:center;">
+          <button onclick="event.stopPropagation();exportStudentAnswersTxt('Twst')" style="background:var(--c4);color:white;border:none;padding:5px 10px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.75rem;cursor:pointer;">📋 txt</button>
+          <span style="color:#aaa;font-size:1rem;">▼</span>
+        </div>
+      </div>
+      <div id="sr-Twst" style="display:none;padding:0.875rem 1rem;background:#fafafa;border-top:1px solid #f0f0f0;">
+        <p style="color:#aaa;font-size:0.88rem;">Ingen svar ennå.</p>
+      </div>
+    </div>
+    <div style="border:2px solid #e8eaed;border-radius:14px;margin-bottom:0.75rem;overflow:hidden;">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:0.875rem 1rem;cursor:pointer;background:white;" onclick="toggleStudentResults('sr-ryth')">
+        <div>
+          <div style="font-weight:800;color:var(--dark);">👤 ryth</div>
+          <div style="font-size:0.78rem;color:#aaa;">0 svar</div>
+        </div>
+        <div style="display:flex;gap:0.4rem;align-items:center;">
+          <button onclick="event.stopPropagation();exportStudentAnswersTxt('ryth')" style="background:var(--c4);color:white;border:none;padding:5px 10px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.75rem;cursor:pointer;">📋 txt</button>
+          <span style="color:#aaa;font-size:1rem;">▼</span>
+        </div>
+      </div>
+      <div id="sr-ryth" style="display:none;padding:0.875rem 1rem;background:#fafafa;border-top:1px solid #f0f0f0;">
+        <p style="color:#aaa;font-size:0.88rem;">Ingen svar ennå.</p>
+      </div>
+    </div></div>
     </div>
   </div>
 
@@ -1046,7 +1145,7 @@
 
 
 <!-- SETTINGS MODAL -->
-<div class="modal-overlay" id="settingsModal">
+<div class="modal-overlay open" id="settingsModal">
   <div class="modal" style="max-width:500px;width:95%;max-height:90vh;overflow-y:auto;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
       <h2 style="margin:0;font-size:1.5rem;">⚙️ Innstillinger</h2>
@@ -1057,9 +1156,9 @@
     <div style="background:linear-gradient(135deg,#f5f3ff,#eff6ff);border-radius:14px;padding:1.25rem;margin-bottom:1.25rem;border:2px solid #e9d5ff;">
       <div style="font-weight:800;font-size:1rem;color:var(--dark);margin-bottom:0.25rem;">🔑 Anthropic API-nøkkel</div>
       <div style="font-size:0.85rem;color:#888;margin-bottom:1rem;">Nødvendig for AI-generering. Lagres kun lokalt i nettleseren.</div>
-      <div id="settingsApiStatus" style="margin-bottom:0.75rem;font-size:0.88rem;font-weight:700;"></div>
+      <div id="settingsApiStatus" style="margin-bottom: 0.75rem; font-size: 0.88rem; font-weight: 700; display: block; color: var(--c3);">✅ API-nøkkel lagret</div>
       <div style="position:relative;margin-bottom:0.75rem;">
-        <input type="password" id="settingsApiInput" placeholder="sk-ant-api03-..." style="width:100%;padding:11px 46px 11px 14px;border:2px solid #e0e0e0;border-radius:10px;font-family:monospace;font-size:0.9rem;outline:none;box-sizing:border-box;" />
+        <input type="password" id="settingsApiInput" placeholder="sk-ant-api03-..." style="width:100%;padding:11px 46px 11px 14px;border:2px solid #e0e0e0;border-radius:10px;font-family:monospace;font-size:0.9rem;outline:none;box-sizing:border-box;">
         <button onclick="toggleSettingsKeyVis()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;" id="settingsEyeBtn">👁</button>
       </div>
       <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
@@ -1078,7 +1177,7 @@
       <div style="font-weight:800;font-size:1rem;color:var(--dark);margin-bottom:0.25rem;">🔐 Endre lærerpassord</div>
       <div style="font-size:0.85rem;color:#888;margin-bottom:1rem;">Passordendringen gjelder kun denne nettlesersesjonen.</div>
       <div class="form-row" style="margin-bottom:0.75rem;">
-        <input type="password" id="newPassInput" placeholder="Nytt passord" style="padding:11px 14px;border:2px solid #e0e0e0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.95rem;outline:none;width:100%;" />
+        <input type="password" id="newPassInput" placeholder="Nytt passord" style="padding:11px 14px;border:2px solid #e0e0e0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.95rem;outline:none;width:100%;">
       </div>
       <button class="btn-success" style="padding:10px 20px;font-size:0.9rem;" onclick="changePassword()">💾 Lagre nytt passord</button>
       <div id="passFeedback" style="display:none;margin-top:0.75rem;padding:10px 14px;border-radius:10px;font-weight:700;font-size:0.88rem;"></div>
@@ -1092,7 +1191,7 @@
       </div>
       <div style="background:white;border-radius:10px;padding:1rem;border:2px solid #dbeafe;margin-bottom:0.875rem;">
         <div style="font-weight:800;font-size:0.88rem;color:var(--dark);margin-bottom:0.6rem;">🔑 Microsoft App-ID (Azure)</div>
-        <input type="text" id="msClientId" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" style="width:100%;padding:10px 12px;border:2px solid #e0e0e0;border-radius:8px;font-family:monospace;font-size:0.85rem;outline:none;margin-bottom:0.6rem;" />
+        <input type="text" id="msClientId" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" style="width:100%;padding:10px 12px;border:2px solid #e0e0e0;border-radius:8px;font-family:monospace;font-size:0.85rem;outline:none;margin-bottom:0.6rem;">
         <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
           <button onclick="saveMsClientId()" style="background:var(--c4);color:white;border:none;padding:8px 16px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.82rem;cursor:pointer;">💾 Lagre</button>
           <button onclick="testMsLogin()" id="msTestBtn" style="background:#0078d4;color:white;border:none;padding:8px 16px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.82rem;cursor:pointer;">🔗 Test innlogging</button>
@@ -1118,19 +1217,15 @@
         Koble til en gratis Supabase-database for å lagre emner, elevsvar og fremdrift på tvers av alle enheter og nettlesere.
       </div>
 
-      <div id="dbStatus" style="margin-bottom:0.875rem;padding:0.6rem 0.875rem;border-radius:10px;font-size:0.85rem;font-weight:700;background:#fff7ed;color:#92400e;">
-        ⏳ Sjekker tilkobling…
-      </div>
+      <div id="dbStatus" style="margin-bottom: 0.875rem; padding: 0.6rem 0.875rem; border-radius: 10px; font-size: 0.85rem; font-weight: 700; background: rgb(220, 252, 231); color: rgb(22, 101, 52);">✅ Tilkoblet: uzufgmhuihvjxlvvspwy.supabase.co</div>
 
       <div style="margin-bottom:0.6rem;">
         <label style="display:block;font-size:0.82rem;font-weight:800;color:#555;margin-bottom:0.3rem;">Project URL</label>
-        <input type="text" id="sbUrlInput" placeholder="https://xxxxxxxxxxxx.supabase.co"
-          style="width:100%;padding:9px 12px;border:2px solid #a7f3d0;border-radius:10px;font-family:monospace;font-size:0.82rem;outline:none;box-sizing:border-box;" />
+        <input type="text" id="sbUrlInput" placeholder="https://xxxxxxxxxxxx.supabase.co" style="width:100%;padding:9px 12px;border:2px solid #a7f3d0;border-radius:10px;font-family:monospace;font-size:0.82rem;outline:none;box-sizing:border-box;">
       </div>
       <div style="margin-bottom:0.875rem;">
         <label style="display:block;font-size:0.82rem;font-weight:800;color:#555;margin-bottom:0.3rem;">Anon / Public API Key</label>
-        <input type="password" id="sbKeyInput" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9…"
-          style="width:100%;padding:9px 12px;border:2px solid #a7f3d0;border-radius:10px;font-family:monospace;font-size:0.82rem;outline:none;box-sizing:border-box;" />
+        <input type="password" id="sbKeyInput" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9…" style="width:100%;padding:9px 12px;border:2px solid #a7f3d0;border-radius:10px;font-family:monospace;font-size:0.82rem;outline:none;box-sizing:border-box;">
       </div>
 
       <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.875rem;">
@@ -1151,12 +1246,12 @@
         <button onclick="saveKeyToFile()" style="background:#d97706;color:white;border:none;padding:9px 20px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.85rem;cursor:pointer;">⬇️ Last ned fil med nøkkel innbakt</button>
       </div>
 
-      <div id="dbFeedback" style="display:none;padding:0.6rem 0.875rem;border-radius:10px;font-size:0.85rem;font-weight:700;margin-bottom:0.875rem;"></div>
-      <div id="dbDiagnosePanel" style="display:none;background:#0f172a;border-radius:12px;padding:1rem;margin-bottom:0.875rem;max-height:300px;overflow-y:auto;">
-        <div style="font-family:monospace;font-size:0.75rem;color:#a3e635;" id="dbDiagnoseLog"></div>
+      <div id="dbFeedback" style="display: block; padding: 0.6rem 0.875rem; border-radius: 10px; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.875rem; background: rgb(220, 252, 231); color: rgb(22, 101, 52);">✅ ✅ Alt OK! Supabase tilkoblet, 1 emne(r) i database.</div>
+      <div id="dbDiagnosePanel" style="display: block; background: rgb(15, 23, 42); border-radius: 12px; padding: 1rem; margin-bottom: 0.875rem; max-height: 300px; overflow-y: auto;">
+        <div style="font-family:monospace;font-size:0.75rem;color:#a3e635;" id="dbDiagnoseLog"><div style="color:#FFD93D;margin-bottom:2px;">🔬 OlaSkole DB Diagnose</div><div style="color:#aaa;margin-bottom:2px;">URL: https://uzufgmhuihvjxlvvspwy.supabase.co</div><div style="color:#aaa;margin-bottom:2px;">Nøkkel: eyJhbGciOiJIUzI1NiIs...</div><div style="color:#6BCB77;margin-bottom:2px;">_ready: true</div><div style="color:#a3e635;margin-bottom:2px;">─────────────────────────────</div><div style="color:#FFD93D;margin-bottom:2px;">TEST 1: Tilkobling...</div><div style="color:#6BCB77;margin-bottom:2px;">TEST 1: ✅ Tilkoblet (HTTP 200)</div><div style="color:#FFD93D;margin-bottom:2px;">TEST 2: Leser os_modules...</div><div style="color:#6BCB77;margin-bottom:2px;">TEST 2: ✅ 1 emner i databasen</div><div style="color:#aaa;margin-bottom:2px;">  1. id=mod_1772924711428_0_tu88</div><div style="color:#FFD93D;margin-bottom:2px;">TEST 3: Skriver testrad...</div><div style="color:#6BCB77;margin-bottom:2px;">TEST 3: ✅ Skriving OK</div><div style="color:#6BCB77;margin-bottom:2px;">TEST 3b: Les tilbake: ✅ OK</div><div style="color:#6BCB77;margin-bottom:2px;">TEST 3c: ✅ Opprydding OK</div><div style="color:#FFD93D;margin-bottom:2px;">TEST 4: Sjekker alle tabeller...</div><div style="color:#6BCB77;margin-bottom:2px;">  os_modules: ✅</div><div style="color:#6BCB77;margin-bottom:2px;">  os_answers: ✅</div><div style="color:#6BCB77;margin-bottom:2px;">  os_progress: ✅</div><div style="color:#6BCB77;margin-bottom:2px;">  os_feedback: ✅</div><div style="color:#6BCB77;margin-bottom:2px;">  os_roster: ✅</div><div style="color:#6BCB77;margin-bottom:2px;">  os_games: ✅</div><div style="color:#6BCB77;margin-bottom:2px;">  os_highscores: ✅</div><div style="color:#a3e635;margin-bottom:2px;">─────────────────────────────</div><div style="color:#FFD93D;margin-bottom:2px;">✅ Diagnose ferdig!</div></div>
       </div>
 
-      <details>
+      <details open="">
         <summary style="font-size:0.82rem;font-weight:800;color:#059669;cursor:pointer;">📋 Slik setter du opp Supabase (5 minutter, helt gratis)</summary>
         <div style="font-size:0.78rem;color:#444;line-height:1.9;margin-top:0.75rem;background:rgba(255,255,255,0.8);border-radius:10px;padding:0.875rem;">
           <b>1.</b> Gå til <a href="https://supabase.com" target="_blank" style="color:#059669;font-weight:800;">supabase.com</a> → «Start your project» → opprett gratis konto<br>
@@ -1183,7 +1278,7 @@
 <div class="view" id="view-join">
 
   <!-- ══ TEACHER SECTION – only shown when isTeacher=true ══ -->
-  <div id="teacherQuizSection" style="display:none;max-width:900px;margin:0 auto 2rem;">
+  <div id="teacherQuizSection" style="display: block; max-width: 900px; margin: 0px auto 2rem;">
     <div id="crOnlineWarning" style="display:none;background:linear-gradient(135deg,#fff7ed,#ffedd5);border:2px solid #fb923c;border-radius:14px;padding:1rem 1.25rem;margin-bottom:1rem;font-size:0.88rem;line-height:1.7;">
       <b>⚠️ Ingen database koblet til!</b> Live Quiz virker kun på <b>samme nettleser</b> uten Supabase.<br>
       Koble til Supabase under <b>⚙️ Innstillinger → Database</b>.
@@ -1212,7 +1307,7 @@
               <label>Tid per spørsmål (sekunder)</label>
               <select id="crTimeLimit" style="width:160px;padding:12px 14px;border-radius:12px;border:2px solid #e0e0e0;font-family:'Nunito',sans-serif;font-weight:700;font-size:1rem;outline:none;">
                 <option value="10">10 sek</option><option value="15">15 sek</option>
-                <option value="20" selected>20 sek</option><option value="30">30 sek</option>
+                <option value="20" selected="">20 sek</option><option value="30">30 sek</option>
                 <option value="45">45 sek</option><option value="60">60 sek</option>
               </select>
             </div>
@@ -1242,9 +1337,8 @@
               <div id="crAnsweredCount" style="font-size:0.9rem;color:#888;">0 av 0 har svart</div>
               <div style="position:relative;width:52px;height:52px;">
                 <svg width="52" height="52" viewBox="0 0 60 60">
-                  <circle cx="30" cy="30" r="26" fill="none" stroke="#e0e0e0" stroke-width="5"/>
-                  <circle id="crTimerCircle" cx="30" cy="30" r="26" fill="none" stroke="var(--c3)" stroke-width="5"
-                    stroke-dasharray="188.5" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 30 30)" style="transition:stroke-dashoffset 1s linear;"/>
+                  <circle cx="30" cy="30" r="26" fill="none" stroke="#e0e0e0" stroke-width="5"></circle>
+                  <circle id="crTimerCircle" cx="30" cy="30" r="26" fill="none" stroke="var(--c3)" stroke-width="5" stroke-dasharray="188.5" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 30 30)" style="transition:stroke-dashoffset 1s linear;"></circle>
                 </svg>
                 <div id="crTimerText" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Fredoka One',cursive;font-size:1rem;color:var(--dark);">20</div>
               </div>
@@ -1294,14 +1388,14 @@
   </div><!-- /teacherQuizSection -->
 
   <!-- ══ STUDENT / PUBLIC SECTION ══ -->
-  <div id="studentQuizSection">
+  <div id="studentQuizSection" style="display: none;">
     <!-- State: enter code -->
     <div id="sj-enter" style="max-width:400px;margin:2rem auto;text-align:center;">
       <div style="font-size:3rem;margin-bottom:0.5rem;">🎮</div>
       <h2 style="font-family:'Fredoka One',cursive;font-size:2rem;color:var(--dark);margin-bottom:0.5rem;">Bli med i quizen!</h2>
       <p style="color:#888;margin-bottom:1.5rem;">Skriv inn koden du fikk av læreren</p>
       <div class="cr-join-box">
-        <input type="text" id="sjCodeInput" maxlength="4" placeholder="KODE" oninput="this.value=this.value.toUpperCase()" />
+        <input type="text" id="sjCodeInput" maxlength="4" placeholder="KODE" oninput="this.value=this.value.toUpperCase()">
         <button class="btn-primary" style="width:100%;font-size:1.1rem;padding:14px;" id="sjJoinBtn" onclick="sjJoinGame()">🚀 Bli med!</button>
         <div id="sjError" style="display:none;color:var(--c1);font-weight:700;margin-top:0.75rem;font-size:0.9rem;"></div>
       </div>
@@ -1398,8 +1492,8 @@
       <!-- Student name prompt if not logged in -->
       <div id="arbLoginPrompt" style="display:none;background:white;border-radius:20px;padding:1.5rem;box-shadow:var(--shadow);max-width:400px;margin-bottom:1.5rem;">
         <div style="font-weight:800;font-size:1.05rem;color:var(--dark);margin-bottom:1rem;">👤 Hvem er du?</div>
-        <input type="text" id="arbNameInput" placeholder="Ditt navn" style="width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:12px;font-family:'Nunito',sans-serif;font-size:1rem;margin-bottom:0.75rem;outline:none;" />
-        <input type="text" id="arbClassInput" placeholder="Klasse (f.eks. 9B)" style="width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:12px;font-family:'Nunito',sans-serif;font-size:1rem;margin-bottom:0.75rem;outline:none;" />
+        <input type="text" id="arbNameInput" placeholder="Ditt navn" style="width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:12px;font-family:'Nunito',sans-serif;font-size:1rem;margin-bottom:0.75rem;outline:none;">
+        <input type="text" id="arbClassInput" placeholder="Klasse (f.eks. 9B)" style="width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:12px;font-family:'Nunito',sans-serif;font-size:1rem;margin-bottom:0.75rem;outline:none;">
         <button class="btn-primary" style="width:100%;" onclick="arbLogin()">Fortsett →</button>
       </div>
 
@@ -1428,9 +1522,8 @@
         <!-- Progress ring -->
         <div id="arbProgressWrap" style="text-align:center;">
           <svg width="54" height="54" viewBox="0 0 54 54">
-            <circle cx="27" cy="27" r="22" fill="none" stroke="#e0e0e0" stroke-width="5"/>
-            <circle cx="27" cy="27" r="22" fill="none" stroke="var(--c3)" stroke-width="5" stroke-linecap="round"
-              stroke-dasharray="138.2" stroke-dashoffset="138.2" id="arbProgressCircle" transform="rotate(-90 27 27)"/>
+            <circle cx="27" cy="27" r="22" fill="none" stroke="#e0e0e0" stroke-width="5"></circle>
+            <circle cx="27" cy="27" r="22" fill="none" stroke="var(--c3)" stroke-width="5" stroke-linecap="round" stroke-dasharray="138.2" stroke-dashoffset="138.2" id="arbProgressCircle" transform="rotate(-90 27 27)"></circle>
           </svg>
           <div style="font-family:'Fredoka One',cursive;font-size:0.75rem;color:var(--c3);margin-top:-38px;position:relative;z-index:1;" id="arbProgressPct">0%</div>
         </div>
@@ -1449,11 +1542,11 @@
 <div class="modal-overlay" id="teacherModal">
   <div class="modal">
     <h2>🔑 Lærertilgang</h2>
-    <input type="password" id="teacherPass" placeholder="Passord" onkeydown="if(event.key==='Enter')loginTeacher()" />
+    <input type="password" id="teacherPass" placeholder="Passord" onkeydown="if(event.key==='Enter')loginTeacher()">
     <div id="teacherError" style="display:none;color:var(--c1);font-weight:800;font-size:0.88rem;margin-bottom:0.5rem;">❌ Feil passord</div>
     <div class="modal-btns">
       <button class="btn-cancel" onclick="closeModal('teacherModal')">Avbryt</button>
-      <button class="btn-primary" id="teacherLoginBtn" onclick="loginTeacher()">Logg inn</button>
+      <button class="btn-primary" id="teacherLoginBtn" onclick="loginTeacher()" style="display: none;">Logg inn</button>
     </div>
     <p style="font-size:0.8rem;color:#aaa;text-align:center;margin-top:1rem;">Hint: <strong>...</strong></p>
   </div>
@@ -3433,7 +3526,7 @@ async function saveKeyToFile() {
   }
   let src = document.documentElement.outerHTML;
   // Replace the EMBEDDED_KEY placeholder
-  src = src.replace("const EMBEDDED_KEY = '';", "const EMBEDDED_KEY = '" + key + "';");
+  src = src.replace("const EMBEDDED_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6dWZnbWh1aWh2anhsdnZzcHd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4ODUyMDcsImV4cCI6MjA4ODQ2MTIwN30.V-KC9DMPfwzr94IqLinWqcv_qJ2ofIqFSgLMnQj3Tig';", "const EMBEDDED_KEY = '" + key + "';");
   src = src.replace("const EMBEDDED_URL = 'https://uzufgmhuihvjxlvvspwy.supabase.co';", "const EMBEDDED_URL = '" + url + "';" );
   const blob = new Blob([src], { type: 'text/html' });
   const a = document.createElement('a');
@@ -4872,5 +4965,6 @@ const SND = (() => {
 })();
 
 </script>
-</body>
-</html>
+
+
+<div id="globalToast" class="toast show">✅ Alle lokale data er nå i Supabase!</div></body></html>
