@@ -1617,6 +1617,17 @@ async function saveModulesToStorage() {
   await DB.saveModules(state.modules);
   renderHomeModules();
   renderTaskModules();
+  if (DB._ready) {
+    // Verify the save worked by loading back from DB
+    const check = await DB._req('GET', '/os_modules?order=sort_order.asc&select=id');
+    if (check !== null && check.length === state.modules.length) {
+      showToast('✅ Lagret til sky (' + state.modules.length + ' emner)');
+    } else if (check !== null && check.length !== state.modules.length) {
+      showToast('⚠️ Sky har ' + check.length + ' emner, forventet ' + state.modules.length + ' – prøv igjen');
+    } else {
+      showToast('⚠️ Lagret lokalt – sky ikke nådd');
+    }
+  }
 }
 function saveAnswersToStorage() {
   localStorage.setItem('lh_answers', JSON.stringify(state.studentAnswers));
@@ -3030,9 +3041,10 @@ const DB = {
 
   // ── low-level REST helper ──────────────────────────────────
   async _req(method, path, body) {
-    if (!this._ready) return null;
+    if (!this._ready) { console.warn('[DB] _req skipped – not ready', method, path); return null; }
+    const url = this._url + '/rest/v1' + path;
     try {
-      const res = await fetch(this._url + '/rest/v1' + path, {
+      const res = await fetch(url, {
         method,
         headers: {
           'apikey':        this._key,
@@ -3044,24 +3056,24 @@ const DB = {
         },
         body: body ? JSON.stringify(body) : undefined
       });
+      const t = await res.text();
       if (!res.ok) {
-        const t = await res.text();
         let parsed = {};
         try { parsed = JSON.parse(t); } catch(_) {}
-        // Table doesn't exist yet - silently ignore, user needs to run SQL
         if (res.status === 404 || parsed.code === '42P01' || (parsed.message||'').includes('does not exist')) {
-          console.warn('Supabase: table not found. Please run the SQL schema in Supabase SQL Editor.');
+          console.error('[DB] Tabell mangler! Kjør SQL-skjemaet i Supabase SQL Editor.', path);
           DB._tablesNotReady = true;
           return null;
         }
-        console.warn('Supabase error', res.status, t);
+        console.error('[DB] HTTP', res.status, method, path, '→', t.substring(0, 300));
         return null;
       }
       DB._tablesNotReady = false;
-      const text = await res.text();
-      return text ? JSON.parse(text) : [];
+      const result = t ? JSON.parse(t) : [];
+      console.log('[DB]', method, path.split('?')[0], '→', Array.isArray(result) ? result.length + ' rader' : 'OK');
+      return result;
     } catch(e) {
-      console.warn('DB fetch error', e);
+      console.error('[DB] Nettverksfeil', method, path, e.message);
       return null;
     }
   },
@@ -3071,9 +3083,12 @@ const DB = {
     const cached = () => JSON.parse(localStorage.getItem('lh_modules') || '[]');
     if (!this._ready) return cached();
     const rows = await this._req('GET', '/os_modules?order=sort_order.asc,created_at.asc&select=id,data,sort_order');
-    if (!rows) return cached();  // network error - use cache
+    if (rows === null) {
+      console.warn('[DB] loadModules feilet – bruker lokal cache');
+      return cached(); // Network/auth error – use cache
+    }
+    // rows can be [] if table is empty – that's valid, don't fall back to cache
     const mods = rows.map(r => r.data).filter(Boolean);
-    // Always update cache with latest from server
     localStorage.setItem('lh_modules', JSON.stringify(mods));
     return mods;
   },
@@ -3086,17 +3101,27 @@ const DB = {
     // Save to localStorage immediately (fast, always works)
     localStorage.setItem('lh_modules', JSON.stringify(modules));
     if (!this._ready) return;
+
     const rows = modules.map((m, i) => ({ id: m._id, data: m, sort_order: i }));
-    // Upsert all current modules
+
+    // Upsert all current modules (POST with merge-duplicates)
     if (rows.length > 0) {
-      await this._req('POST', '/os_modules', rows);
+      const result = await this._req('POST', '/os_modules', rows);
+      if (result === null) {
+        console.error('[DB] saveModules: POST/upsert feilet!');
+        return; // Don't delete if upsert failed
+      }
     }
-    // Delete any modules that no longer exist (by ID)
-    const ids = rows.map(r => `'${r.id}'`).join(',');
-    const deleteFilter = rows.length > 0
-      ? `/os_modules?id=not.in.(${ids})`
-      : '/os_modules?sort_order=gte.0';
-    await this._req('DELETE', deleteFilter);
+
+    // Delete modules that no longer exist
+    // PostgREST requires id=not.in.(val1,val2) WITHOUT quotes around values
+    if (rows.length > 0) {
+      const ids = rows.map(r => r.id).join(',');
+      await this._req('DELETE', `/os_modules?id=not.in.(${ids})`);
+    } else {
+      // No modules left - delete all
+      await this._req('DELETE', `/os_modules?sort_order=gte.0`);
+    }
   },
 
   // ── STUDENT ANSWERS ────────────────────────────────────────
