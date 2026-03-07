@@ -546,20 +546,20 @@
 <style id="confettiStyle">@keyframes confettiFall{to{transform:translateY(110vh) rotate(720deg);opacity:0;}}</style></head>
 <body>
 
-<div class="progress-top"><div class="progress-fill" id="progressFill" style="width: 90%;"></div></div>
+<div class="progress-top"><div class="progress-fill" id="progressFill" style="width: 20%;"></div></div>
 
 <nav>
   <div class="logo" onclick="showView('home')" style="cursor:pointer;" title="Tilbake til hjem">Ola<span>Skole</span></div>
   <div class="nav-tabs">
-    <button class="nav-tab" onclick="showView('home')">🏠 Hjem</button>
+    <button class="nav-tab active" onclick="showView('home')">🏠 Hjem</button>
     <button class="nav-tab" onclick="showView('tasks')" id="tasksTab">📚 Oppgaver</button>
-    <button class="nav-tab active" onclick="showView('join')" id="quizNavBtn" style="background:linear-gradient(135deg,var(--c5),#a855f7);color:white;">🎮 Quiz</button>
+    <button class="nav-tab" onclick="showView('join')" id="quizNavBtn" style="background:linear-gradient(135deg,var(--c5),#a855f7);color:white;">🎮 Quiz</button>
     <button class="nav-tab" onclick="arbOpen()" id="arbNavBtn" style="background:linear-gradient(135deg,var(--c3),#22c55e);color:white;">📚 Arbeid</button>
     <button class="nav-tab teacher-tab" onclick="checkTeacher()" style="display: inline-flex;">🖊️ Lærerrom</button>
     <button class="nav-tab teacher-tab" onclick="openSettings()" style="display: inline-flex; position: relative;">⚙️ Innstillinger<span id="dbNavPill" style="position: absolute; top: 4px; right: 6px; width: 9px; height: 9px; border-radius: 50%; background: rgb(5, 150, 105); display: inline-block; font-size: 0px; border: 2px solid white;" title="Database: Supabase tilkoblet"></span></button>
   </div>
   <div class="nav-right">
-    <div class="role-badge" id="roleBadge">🖊️ Lærer</div>
+    <div class="role-badge" id="roleBadge">🎓 ryth</div>
     <button class="dark-toggle" id="darkToggle" onclick="toggleDark()" title="Mørkt modus">🌙</button>
     <button class="teacher-btn" onclick="openTeacherModal()">🔑 Lærer</button>
   </div>
@@ -568,7 +568,7 @@
 <!-- MOBILE BOTTOM NAV -->
 <nav class="mobile-nav" id="mobileNav">
   <div class="mobile-nav-inner">
-    <button class="mob-nav-btn" id="mob-home" onclick="mobNav('home')">
+    <button class="mob-nav-btn active" id="mob-home" onclick="mobNav('home')">
       <span class="mob-icon">🏠</span>Hjem
     </button>
     <button class="mob-nav-btn" id="mob-tasks" onclick="mobNav('tasks')">
@@ -580,14 +580,14 @@
     <button class="mob-nav-btn" id="mob-join" onclick="showView('join')">
       <span class="mob-icon">🎮</span>Quiz
     </button>
-    <button class="mob-nav-btn teacher-tab active" id="mob-teacher" onclick="checkTeacher()" style="display: inline-flex;">
+    <button class="mob-nav-btn teacher-tab" id="mob-teacher" onclick="checkTeacher()" style="display: inline-flex;">
       <span class="mob-icon">🖊️</span>Lærer
     </button>
   </div>
 </nav>
 
 <!-- HOME VIEW -->
-<div class="view" id="view-home">
+<div class="view active" id="view-home">
 
   <!-- Hero banner -->
   <div class="home-hero">
@@ -620,8 +620,8 @@
     <div id="welcomeBack" style="display: block;">
       <div class="welcome-back-card">
         <div style="font-size:2.2rem;margin-bottom:0.4rem;">👋</div>
-        <div style="font-family:'Fredoka One',cursive;font-size:1.35rem;margin-bottom:0.1rem;" id="welcomeName">Hei, test! 👋</div>
-        <div style="font-size:0.88rem;opacity:0.8;" id="welcomeClass">9A</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:1.35rem;margin-bottom:0.1rem;" id="welcomeName">Hei, ryth! 👋</div>
+        <div style="font-size:0.88rem;opacity:0.8;" id="welcomeClass"></div>
         <div id="studentProgressWrap" style="margin-top:0.75rem;background:rgba(255,255,255,0.2);border-radius:50px;height:8px;overflow:hidden;"><div id="studentProgressBar" style="height:100%;background:var(--c2);border-radius:50px;width:0%;transition:width 0.6s ease;"></div></div>
         <div id="studentProgressLabel" style="font-size:0.75rem;opacity:0.75;margin-top:0.3rem;font-weight:700;">0% fullført (0/6 aktiviteter)</div>
         <button onclick="studentLogout()" style="margin-top:0.75rem;background:rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.4);color:white;padding:6px 16px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.8rem;cursor:pointer;">Bytt bruker</button>
@@ -629,7 +629,7 @@
     </div>
   </div>
 
-  <div class="badge-area" id="badgeArea" style="display: flex; justify-content: center;"><div class="badge earned"><span class="badge-icon">⭐</span>Første svar!</div></div>
+  <div class="badge-area" id="badgeArea" style="display: flex; justify-content: center;"><div class="badge"><span class="badge-icon">🌱</span>Begynn å løse oppgaver!</div></div>
 
   <!-- Module search + grid -->
   <div id="homeModules">
@@ -641,7 +641,7 @@
     </div>
     <div id="subjectFilter" style="display:flex;gap:0.45rem;flex-wrap:wrap;margin-bottom:1rem;"></div>
     <div class="modules-grid" id="homeModulesGrid"><div class="module-card color-1" style="position:relative;" onclick="openModule(0)" data-module-name="Demokrati og samfunn" data-module-subject="🗳️">
-      <button class="mc-edit-btn" onclick="event.stopPropagation();quickEditModule(0)" title="Rediger">✏️</button>
+      
       <span class="mc-emoji">🗳️</span>
       <h3>Demokrati og samfunn</h3>
       <p>Hva er demokrati, og hvordan fungerer det?</p>
@@ -661,7 +661,7 @@
   <div id="moduleList">
     <div class="section-title">📚 Alle emner</div>
     <div class="modules-grid" id="taskModulesGrid"><div class="module-card color-1" style="position:relative;" onclick="openModule(0)">
-      <button class="mc-edit-btn" onclick="event.stopPropagation();quickEditModule(0)" title="Rediger">✏️</button>
+      
       <span class="mc-emoji">🗳️</span>
       <h3>Demokrati og samfunn</h3>
       <p>Hva er demokrati, og hvordan fungerer det?</p>
@@ -687,7 +687,7 @@
 </div>
 
 <!-- TEACHER VIEW -->
-<div class="view active" id="view-teacher">
+<div class="view" id="view-teacher">
   <div class="tr-header">
     <div class="section-title" style="margin-bottom:0;">⚙️ Lærerrom</div>
     <div class="tr-tabs">
@@ -1246,9 +1246,9 @@
         <button onclick="saveKeyToFile()" style="background:#d97706;color:white;border:none;padding:9px 20px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.85rem;cursor:pointer;">⬇️ Last ned fil med nøkkel innbakt</button>
       </div>
 
-      <div id="dbFeedback" style="display: block; padding: 0.6rem 0.875rem; border-radius: 10px; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.875rem; background: rgb(220, 252, 231); color: rgb(22, 101, 52);">✅ ✅ Alt OK! Supabase tilkoblet, 1 emne(r) i database.</div>
+      <div id="dbFeedback" style="display: block; padding: 0.6rem 0.875rem; border-radius: 10px; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.875rem; background: rgb(220, 252, 231); color: rgb(22, 101, 52);">✅ Ferdig! 1 emner, 0 svar, 4 elever migrert.</div>
       <div id="dbDiagnosePanel" style="display: block; background: rgb(15, 23, 42); border-radius: 12px; padding: 1rem; margin-bottom: 0.875rem; max-height: 300px; overflow-y: auto;">
-        <div style="font-family:monospace;font-size:0.75rem;color:#a3e635;" id="dbDiagnoseLog"><div style="color:#FFD93D;margin-bottom:2px;">🔬 OlaSkole DB Diagnose</div><div style="color:#aaa;margin-bottom:2px;">URL: https://uzufgmhuihvjxlvvspwy.supabase.co</div><div style="color:#aaa;margin-bottom:2px;">Nøkkel: eyJhbGciOiJIUzI1NiIs...</div><div style="color:#6BCB77;margin-bottom:2px;">_ready: true</div><div style="color:#a3e635;margin-bottom:2px;">─────────────────────────────</div><div style="color:#FFD93D;margin-bottom:2px;">TEST 1: Tilkobling...</div><div style="color:#6BCB77;margin-bottom:2px;">TEST 1: ✅ Tilkoblet (HTTP 200)</div><div style="color:#FFD93D;margin-bottom:2px;">TEST 2: Leser os_modules...</div><div style="color:#6BCB77;margin-bottom:2px;">TEST 2: ✅ 1 emner i databasen</div><div style="color:#aaa;margin-bottom:2px;">  1. id=mod_1772924711428_0_tu88</div><div style="color:#FFD93D;margin-bottom:2px;">TEST 3: Skriver testrad...</div><div style="color:#6BCB77;margin-bottom:2px;">TEST 3: ✅ Skriving OK</div><div style="color:#6BCB77;margin-bottom:2px;">TEST 3b: Les tilbake: ✅ OK</div><div style="color:#6BCB77;margin-bottom:2px;">TEST 3c: ✅ Opprydding OK</div><div style="color:#FFD93D;margin-bottom:2px;">TEST 4: Sjekker alle tabeller...</div><div style="color:#6BCB77;margin-bottom:2px;">  os_modules: ✅</div><div style="color:#6BCB77;margin-bottom:2px;">  os_answers: ✅</div><div style="color:#6BCB77;margin-bottom:2px;">  os_progress: ✅</div><div style="color:#6BCB77;margin-bottom:2px;">  os_feedback: ✅</div><div style="color:#6BCB77;margin-bottom:2px;">  os_roster: ✅</div><div style="color:#6BCB77;margin-bottom:2px;">  os_games: ✅</div><div style="color:#6BCB77;margin-bottom:2px;">  os_highscores: ✅</div><div style="color:#a3e635;margin-bottom:2px;">─────────────────────────────</div><div style="color:#FFD93D;margin-bottom:2px;">✅ Diagnose ferdig!</div></div>
+        <div style="font-family:monospace;font-size:0.75rem;color:#a3e635;" id="dbDiagnoseLog"><div style="color:#FFD93D;margin-bottom:2px;">🔬 OlaSkole DB Diagnose</div><div style="color:#aaa;margin-bottom:2px;">URL: https://uzufgmhuihvjxlvvspwy.supabase.co</div><div style="color:#aaa;margin-bottom:2px;">Nøkkel: eyJhbGciOiJIUzI1NiIs...</div><div style="color:#6BCB77;margin-bottom:2px;">_ready: true</div><div style="color:#a3e635;margin-bottom:2px;">─────────────────────────────</div><div style="color:#FFD93D;margin-bottom:2px;">TEST 1: Tilkobling...</div><div style="color:#6BCB77;margin-bottom:2px;">TEST 1: ✅ Tilkoblet (HTTP 200)</div><div style="color:#FFD93D;margin-bottom:2px;">TEST 2: Leser os_modules...</div><div style="color:#6BCB77;margin-bottom:2px;">TEST 2: ✅ 1 emner i databasen</div><div style="color:#aaa;margin-bottom:2px;">  1. id=mod_1772925211908_0_4qak</div><div style="color:#FFD93D;margin-bottom:2px;">TEST 3: Skriver testrad...</div><div style="color:#6BCB77;margin-bottom:2px;">TEST 3: ✅ Skriving OK</div><div style="color:#6BCB77;margin-bottom:2px;">TEST 3b: Les tilbake: ✅ OK</div><div style="color:#6BCB77;margin-bottom:2px;">TEST 3c: ✅ Opprydding OK</div><div style="color:#FFD93D;margin-bottom:2px;">TEST 4: Sjekker alle tabeller...</div><div style="color:#6BCB77;margin-bottom:2px;">  os_modules: ✅</div><div style="color:#6BCB77;margin-bottom:2px;">  os_answers: ✅</div><div style="color:#6BCB77;margin-bottom:2px;">  os_progress: ✅</div><div style="color:#6BCB77;margin-bottom:2px;">  os_feedback: ✅</div><div style="color:#6BCB77;margin-bottom:2px;">  os_roster: ✅</div><div style="color:#6BCB77;margin-bottom:2px;">  os_games: ✅</div><div style="color:#6BCB77;margin-bottom:2px;">  os_highscores: ✅</div><div style="color:#a3e635;margin-bottom:2px;">─────────────────────────────</div><div style="color:#FFD93D;margin-bottom:2px;">✅ Diagnose ferdig!</div></div>
       </div>
 
       <details open="">
@@ -4967,4 +4967,5 @@ const SND = (() => {
 </script>
 
 
-<div id="globalToast" class="toast show">✅ Alle lokale data er nå i Supabase!</div></body></html>
+<div id="globalToast" class="toast">✅ Alle lokale data er nå i Supabase!</div>
+</body></html>
