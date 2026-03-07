@@ -1152,6 +1152,10 @@
 
 <!-- CLASSROOM VIEW (Teacher) -->
 <div class="view" id="view-classroom">
+  <div id="crOnlineWarning" style="display:none;background:linear-gradient(135deg,#fff7ed,#ffedd5);border:2px solid #fb923c;border-radius:14px;padding:1rem 1.25rem;margin-bottom:1rem;font-size:0.88rem;line-height:1.7;">
+    <b>⚠️ Ingen database koblet til!</b> Live Quiz virker kun på <b>samme nettleser</b> uten Supabase.<br>
+    For å spille med andre over internett: koble til Supabase under <b>⚙️ Innstillinger → Database</b> og legg til <code>os_games</code>-tabellen via SQL-skjemaet.
+  </div>
   <!-- Mode selector -->
   <div style="max-width:900px;margin:0 auto;">
     <div class="section-title">🎓 Klasserom</div>
@@ -1286,7 +1290,7 @@
     <p style="color:#888;margin-bottom:1.5rem;">Skriv inn koden du fikk av læreren</p>
     <div class="cr-join-box">
       <input type="text" id="sjCodeInput" maxlength="4" placeholder="KODE" oninput="this.value=this.value.toUpperCase()" />
-      <button class="btn-primary" style="width:100%;font-size:1.1rem;padding:14px;" onclick="sjJoinGame()">🚀 Bli med!</button>
+      <button class="btn-primary" style="width:100%;font-size:1.1rem;padding:14px;" id="sjJoinBtn" onclick="sjJoinGame()">🚀 Bli med!</button>
       <div id="sjError" style="display:none;color:var(--c1);font-weight:700;margin-top:0.75rem;font-size:0.9rem;"></div>
     </div>
   </div>
@@ -3133,7 +3137,7 @@ create table if not exists os_modules (
 create table if not exists os_answers (
   answer_key    text primary key,
   student_name  text not null,
-  student_class text default '',
+  student_class text default \'\',
   value         text,
   correct       boolean default false,
   updated_at    timestamptz default now()
@@ -3143,7 +3147,7 @@ create index if not exists os_answers_student on os_answers(student_name);
 create table if not exists os_progress (
   progress_key  text primary key,
   student_name  text not null,
-  student_class text default '',
+  student_class text default \'\',
   value         text,
   updated_at    timestamptz default now()
 );
@@ -3161,18 +3165,36 @@ create table if not exists os_roster (
   created_at timestamptz default now()
 );
 
--- Row Level Security (åpen tilgang for skoleintern bruk)
+create table if not exists os_games (
+  code       text primary key,
+  data       jsonb not null,
+  updated_at timestamptz default now()
+);
+
+-- Row Level Security
 alter table os_modules  enable row level security;
 alter table os_answers  enable row level security;
 alter table os_progress enable row level security;
 alter table os_feedback enable row level security;
 alter table os_roster   enable row level security;
+alter table os_games    enable row level security;
 
-create policy if not exists "allow_all_modules"  on os_modules  for all using (true) with check (true);
-create policy if not exists "allow_all_answers"  on os_answers  for all using (true) with check (true);
-create policy if not exists "allow_all_progress" on os_progress for all using (true) with check (true);
-create policy if not exists "allow_all_feedback" on os_feedback for all using (true) with check (true);
-create policy if not exists "allow_all_roster"   on os_roster   for all using (true) with check (true);
+-- Policies (drop first to avoid conflicts on re-run)
+do $$ begin
+  drop policy if exists "allow_all_modules"  on os_modules;
+  drop policy if exists "allow_all_answers"  on os_answers;
+  drop policy if exists "allow_all_progress" on os_progress;
+  drop policy if exists "allow_all_feedback" on os_feedback;
+  drop policy if exists "allow_all_roster"   on os_roster;
+  drop policy if exists "allow_all_games"    on os_games;
+end $$;
+
+create policy "allow_all_modules"  on os_modules  for all using (true) with check (true);
+create policy "allow_all_answers"  on os_answers  for all using (true) with check (true);
+create policy "allow_all_progress" on os_progress for all using (true) with check (true);
+create policy "allow_all_feedback" on os_feedback for all using (true) with check (true);
+create policy "allow_all_roster"   on os_roster   for all using (true) with check (true);
+create policy "allow_all_games"    on os_games    for all using (true) with check (true);
 `;
 
 function copyDbSchema() {
@@ -3422,6 +3444,44 @@ const NOUNS = ['Elg','Bjørn','Rev','Ulv','Ørn','Sel','Hval','Løve','Tiger','P
 
 let crGame = null; // teacher game state
 let sjGame = null; // student game state
+
+
+// ════════════════════════════════════════════════════════════
+//  GAME – real-time game state via Supabase os_games table
+//  Falls back to localStorage when DB not configured
+// ════════════════════════════════════════════════════════════
+const GAME = {
+  async save(code, data) {
+    localStorage.setItem('cr_game', JSON.stringify(data)); // always local backup
+    if (!DB.isReady()) return;
+    await DB._req('POST', '/os_games', [{
+      code: code,
+      data: data,
+      updated_at: new Date().toISOString()
+    }]);
+  },
+
+  async load(code) {
+    if (!DB.isReady()) {
+      const raw = localStorage.getItem('cr_game');
+      if (!raw) return null;
+      const d = JSON.parse(raw);
+      return d.code === code ? d : null;
+    }
+    const rows = await DB._req('GET', `/os_games?code=eq.${encodeURIComponent(code)}&select=data,updated_at&limit=1`);
+    if (!rows || !rows.length) return null;
+    // Check freshness - games older than 3 hours are stale
+    const age = Date.now() - new Date(rows[0].updated_at).getTime();
+    if (age > 3 * 60 * 60 * 1000) return null;
+    return rows[0].data;
+  },
+
+  async delete(code) {
+    localStorage.removeItem('cr_game');
+    if (!DB.isReady()) return;
+    await DB._req('DELETE', `/os_games?code=eq.${encodeURIComponent(code)}`);
+  }
+};
 
 function crGenerateCode() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -3852,7 +3912,7 @@ function sjShow(phase) {
 }
 
 // ---- Teacher: Create game ----
-function crCreateGame() {
+async function crCreateGame() {
   const sel = document.getElementById('crModuleSelect');
   if (!sel || !sel.value) { alert('Velg et emne først!'); return; }
   const modIdx = parseInt(sel.value);
@@ -3881,18 +3941,29 @@ function crCreateGame() {
     revealed: false
   };
 
-  localStorage.setItem('cr_game', JSON.stringify({ code, phase:'lobby', players:{}, currentQ:-1, timeLimit, questions: crGame.questions }));
+  const remoteData = { code, phase:'lobby', players:{}, currentQ:-1, timeLimit, questions: crGame.questions };
+  crGame._remote = remoteData;
+  localStorage.setItem('cr_game', JSON.stringify(remoteData));
+
+  // Show lobby immediately, then save to cloud
   crShow('lobby-view');
   document.getElementById('crCodeDisplay').textContent = code;
+
+  // Check if Supabase is configured
+  if (!DB.isReady()) {
+    const warning = document.getElementById('crOnlineWarning');
+    if (warning) warning.style.display = 'block';
+  }
+  await GAME.save(code, remoteData);
   crStartPolling();
 }
 
 function crStartPolling() {
   if (crGame._pollInterval) clearInterval(crGame._pollInterval);
-  crGame._pollInterval = setInterval(() => {
-    const raw = localStorage.getItem('cr_game');
-    if (!raw) return;
-    const data = JSON.parse(raw);
+  crGame._pollInterval = setInterval(async () => {
+    const data = await GAME.load(crGame.code);
+    if (!data) return;
+    crGame._remote = data;
     // Merge in any new players
     crGame.players = data.players || {};
     crRefreshLobby();
@@ -3903,7 +3974,7 @@ function crStartPolling() {
       const el = document.getElementById('crAnsweredCount');
       if (el) el.textContent = `${answered} av ${total} har svart`;
     }
-  }, 800);
+  }, 1000);
 }
 
 function crRefreshLobby() {
@@ -3914,7 +3985,7 @@ function crRefreshLobby() {
   ).join('');
 }
 
-function crStartQuiz() {
+async function crStartQuiz() {
   if (Object.keys(crGame.players).length === 0) {
     if (!confirm('Ingen elever er tilkoblet ennå. Start likevel?')) return;
   }
@@ -3922,7 +3993,7 @@ function crStartQuiz() {
   crNextQuestion();
 }
 
-function crNextQuestion() {
+async function crNextQuestion() {
   crGame.currentQ++;
   crGame.revealed = false;
   if (crGame.currentQ >= crGame.questions.length) { crShowFinalScoreboard(); return; }
@@ -3944,7 +4015,7 @@ function crNextQuestion() {
   ).join('');
 
   // Broadcast question to students
-  crBroadcast({ phase:'question', currentQ: crGame.currentQ, question: q.question, options: q.options.map(o => o.text), timeLimit: crGame.timeLimit });
+  await crBroadcast({ phase:'question', currentQ: crGame.currentQ, question: q.question, options: q.options.map(o => o.text), timeLimit: crGame.timeLimit });
 
   // Start timer
   if (crGame.timerInterval) clearInterval(crGame.timerInterval);
@@ -3959,7 +4030,7 @@ function crNextQuestion() {
   }, 1000);
 }
 
-function crRevealAnswer() {
+async function crRevealAnswer() {
   if (crGame.revealed) return;
   crGame.revealed = true;
   if (crGame.timerInterval) clearInterval(crGame.timerInterval);
@@ -3978,9 +4049,8 @@ function crRevealAnswer() {
   // Score students
   const timeSpent = crGame.timeLimit - crGame.timeLeft;
   const maxScore = 1000;
-  const raw = localStorage.getItem('cr_game');
-  if (raw) {
-    const data = JSON.parse(raw);
+  {
+    const data = crGame._remote || {};
     crGame.players = data.players || crGame.players;
     const correctLetter = q.options[correctIdx].letter;
     Object.values(crGame.players).forEach(p => {
@@ -3997,14 +4067,14 @@ function crRevealAnswer() {
         ans.points = 0;
       }
     });
-    crBroadcast({ phase:'revealed', correctLetter, players: crGame.players, currentQ: crGame.currentQ });
+    await crBroadcast({ phase:'revealed', correctLetter, players: crGame.players, currentQ: crGame.currentQ });
   }
 }
 
-function crShowFinalScoreboard() {
+async function crShowFinalScoreboard() {
   if (crGame._pollInterval) clearInterval(crGame._pollInterval);
   crShow('scoreboard-view');
-  crBroadcast({ phase:'gameover', players: crGame.players });
+  await crBroadcast({ phase:'gameover', players: crGame.players });
   const sorted = Object.values(crGame.players).sort((a,b) => (b.score||0)-(a.score||0));
   const medals = ['🥇','🥈','🥉'];
   document.getElementById('crScoreboard').innerHTML = sorted.map((p,i) => `
@@ -4016,9 +4086,10 @@ function crShowFinalScoreboard() {
     </div>`).join('') || '<p style="color:#aaa;">Ingen spillere</p>';
 }
 
-function crCancelGame() {
+async function crCancelGame() {
   if (crGame?._pollInterval) clearInterval(crGame._pollInterval);
   if (crGame?.timerInterval) clearInterval(crGame.timerInterval);
+  if (crGame?.code) await GAME.delete(crGame.code);
   localStorage.removeItem('cr_game');
   crGame = null;
   crShow('setup');
@@ -4036,35 +4107,45 @@ function crPlayAgain() {
   crPopulateModules();
 }
 
-function crBroadcast(update) {
-  const raw = localStorage.getItem('cr_game');
-  if (!raw) return;
-  const data = JSON.parse(raw);
-  Object.assign(data, update);
-  localStorage.setItem('cr_game', JSON.stringify(data));
+async function crBroadcast(update) {
+  Object.assign(crGame._remote, update);
+  localStorage.setItem('cr_game', JSON.stringify(crGame._remote)); // local backup
+  await GAME.save(crGame.code, crGame._remote);
 }
 
 // ---- Student: Join & Play ----
-function sjJoinGame() {
+async function sjJoinGame() {
   const code = (document.getElementById('sjCodeInput').value || '').trim().toUpperCase();
   if (code.length !== 4) { sjShowError('Koden må være 4 tegn!'); return; }
 
-  const raw = localStorage.getItem('cr_game');
-  if (!raw) { sjShowError('Fant ingen aktiv quiz med den koden. Sjekk koden og prøv igjen!'); return; }
-  const data = JSON.parse(raw);
-  if (data.code !== code) { sjShowError('Feil kode! Prøv igjen.'); return; }
+  const joinBtn = document.getElementById('sjJoinBtn');
+  if (joinBtn) { joinBtn.textContent = '⏳ Kobler til…'; joinBtn.disabled = true; }
+
+  // Try cloud first, then localStorage fallback
+  let data = await GAME.load(code);
+  if (!data) {
+    // localStorage fallback for same-device testing
+    const raw = localStorage.getItem('cr_game');
+    if (raw) {
+      const local = JSON.parse(raw);
+      if (local.code === code) data = local;
+    }
+  }
+
+  if (joinBtn) { joinBtn.textContent = '🎮 Bli med!'; joinBtn.disabled = false; }
+
+  if (!data) { sjShowError('Fant ingen aktiv quiz med den koden. Sjekk koden og prøv igjen!'); return; }
   if (data.phase !== 'lobby') { sjShowError('Spillet er allerede i gang. Vent til neste runde!'); return; }
 
-  // Generate username
   const username = crGenerateUsername();
   const avatar = ANIMALS[Math.floor(Math.random()*ANIMALS.length)];
   sjGame = { code, username, avatar, score: 0, answers: {}, currentQ: -1 };
 
-  // Register player
-  const gameData = JSON.parse(localStorage.getItem('cr_game'));
-  if (!gameData.players) gameData.players = {};
-  gameData.players[username] = { username, avatar, score: 0, answers: {} };
-  localStorage.setItem('cr_game', JSON.stringify(gameData));
+  // Register player in cloud
+  if (!data.players) data.players = {};
+  data.players[username] = { username, avatar, score: 0, answers: {} };
+  await GAME.save(code, data);
+  localStorage.setItem('cr_game', JSON.stringify(data));
 
   document.getElementById('sjUsername').textContent = username;
   document.getElementById('sjAvatar').textContent = avatar;
@@ -4081,23 +4162,42 @@ function sjShowError(msg) {
 
 function sjStartPolling() {
   if (sjGame._pollInterval) clearInterval(sjGame._pollInterval);
-  sjGame._pollInterval = setInterval(() => {
-    const raw = localStorage.getItem('cr_game');
-    if (!raw) { clearInterval(sjGame._pollInterval); sjShow('gameover'); return; }
-    const data = JSON.parse(raw);
+  sjGame._noDataCount = 0;
+  sjGame._lastPhase = null;
+  sjGame._pollInterval = setInterval(async () => {
+    let data = await GAME.load(sjGame.code);
+    if (!data) {
+      // fallback to localStorage
+      const raw = localStorage.getItem('cr_game');
+      data = raw ? JSON.parse(raw) : null;
+    }
+    if (!data) {
+      sjGame._noDataCount = (sjGame._noDataCount || 0) + 1;
+      if (sjGame._noDataCount > 10) { clearInterval(sjGame._pollInterval); sjShow('gameover'); }
+      return;
+    }
+    sjGame._noDataCount = 0;
+    // Update local backup
+    localStorage.setItem('cr_game', JSON.stringify(data));
+
+    const phaseKey = data.phase + '_' + data.currentQ;
+    if (phaseKey === sjGame._lastPhase) return; // no change
 
     if (data.phase === 'question' && data.currentQ !== undefined && data.currentQ !== sjGame.currentQ) {
+      sjGame._lastPhase = phaseKey;
       sjGame.currentQ = data.currentQ;
       sjGame.questionStart = Date.now();
       sjGame.answered = false;
       sjShowQuestion(data);
     } else if (data.phase === 'revealed' && data.currentQ === sjGame.currentQ) {
+      sjGame._lastPhase = phaseKey;
       sjShowResult(data);
     } else if (data.phase === 'gameover') {
+      sjGame._lastPhase = phaseKey;
       clearInterval(sjGame._pollInterval);
       sjShowGameOver(data);
     }
-  }, 600);
+  }, 800);
 }
 
 function sjShowQuestion(data) {
@@ -4121,21 +4221,20 @@ function sjShowQuestion(data) {
   }, 1000);
 }
 
-function sjAnswer(letter) {
+async function sjAnswer(letter) {
   if (sjGame.answered) return;
   sjGame.answered = true;
   const timeSpent = (Date.now() - (sjGame.questionStart || Date.now())) / 1000;
   if (sjGame._timerBar) clearInterval(sjGame._timerBar);
 
-  // Save answer
-  const raw = localStorage.getItem('cr_game');
-  if (raw) {
-    const data = JSON.parse(raw);
-    if (!data.players[sjGame.username]) data.players[sjGame.username] = { username: sjGame.username, avatar: sjGame.avatar, score: 0, answers: {} };
-    if (!data.players[sjGame.username].answers) data.players[sjGame.username].answers = {};
-    data.players[sjGame.username].answers[sjGame.currentQ] = { letter, timeSpent };
-    localStorage.setItem('cr_game', JSON.stringify(data));
-  }
+  // Save answer to cloud
+  const gameData = await GAME.load(sjGame.code) || JSON.parse(localStorage.getItem('cr_game') || '{}');
+  if (!gameData.players) gameData.players = {};
+  if (!gameData.players[sjGame.username]) gameData.players[sjGame.username] = { username: sjGame.username, avatar: sjGame.avatar, score: 0, answers: {} };
+  if (!gameData.players[sjGame.username].answers) gameData.players[sjGame.username].answers = {};
+  gameData.players[sjGame.username].answers[sjGame.currentQ] = { letter, timeSpent };
+  localStorage.setItem('cr_game', JSON.stringify(gameData));
+  await GAME.save(sjGame.code, gameData);
 
   document.getElementById('sjAnsweredIcon').textContent = '✅';
   document.getElementById('sjAnsweredMsg').textContent = 'Svar registrert!';
