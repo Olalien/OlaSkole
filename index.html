@@ -3037,37 +3037,42 @@ const DB = {
 
   // ── MODULER (lærers innhold) ───────────────────────────────────────
   async loadModules() {
-    console.log('[DB] loadModules: henter fra Supabase...');
     const rows = await this._q('GET', 'os_modules', 'order=sort_order.asc,created_at.asc&select=id,data,sort_order');
     if (rows === null) {
-      console.warn('[DB] loadModules: DB feilet – bruker localStorage');
       try { return JSON.parse(localStorage.getItem('lh_modules') || '[]'); } catch { return []; }
     }
-    console.log('[DB] loadModules: fikk', rows.length, 'rader:', rows.map(r=>r.id));
-    const mods = rows.map(r => r.data).filter(Boolean);
+    // Dedupliser: behold kun én rad per _id (siste vinner)
+    const seen = new Map();
+    rows.forEach(r => {
+      if (r.data && r.data._id) {
+        seen.set(r.data._id, r);
+      } else if (r.data) {
+        seen.set(r.id, r); // fallback til rad-id
+      }
+    });
+    const mods = Array.from(seen.values()).map(r => r.data).filter(Boolean);
     localStorage.setItem('lh_modules', JSON.stringify(mods));
+    // Slett eventuelle duplikat-rader fra Supabase stille i bakgrunnen
+    if (seen.size < rows.length) {
+      const keepIds = Array.from(seen.values()).map(r => r.id);
+      console.log('[DB] Rydder duplikater, beholder:', keepIds);
+      if (keepIds.length > 0) {
+        await this._q('DELETE', 'os_modules', 'id=not.in.(' + keepIds.join(',') + ')');
+      }
+    }
     return mods;
   },
 
   async saveModules(modules) {
-    console.log('[DB] saveModules: lagrer', modules.length, 'moduler...');
     modules.forEach((m, i) => {
       if (!m._id) m._id = 'mod_' + Date.now() + '_' + i + '_' + Math.random().toString(36).slice(2, 7);
     });
     localStorage.setItem('lh_modules', JSON.stringify(modules));
-
-    // Upsert alle moduler til Supabase (aldri slett her – sletting skjer via deleteModule)
     for (let i = 0; i < modules.length; i++) {
       const m = modules[i];
-      console.log('[DB] saveModules: upsert', m._id, '"' + m.name + '"');
       const ok = await this._q('POST', 'os_modules', null, [{ id: m._id, data: m, sort_order: i }]);
-      if (ok === null) {
-        console.error('[DB] saveModules: FEILET for', m._id);
-        return false;
-      }
-      console.log('[DB] saveModules: OK', m._id);
+      if (ok === null) return false;
     }
-    console.log('[DB] saveModules: FERDIG ✅');
     return true;
   },
 
