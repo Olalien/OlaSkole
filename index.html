@@ -1537,7 +1537,7 @@ function showView(name) {
   const idx = ['home','tasks','teacher'].indexOf(name);
   if (idx >= 0 && tabs[idx]) tabs[idx].classList.add('active');
   if (name === 'home') renderHomeModules();
-  if (name === 'tasks') { DB.loadModules().then(m => { state.modules = m; renderTaskModules(); }).catch(() => renderTaskModules()); }
+  if (name === 'tasks') { DB.loadModules().then(m => { state.modules = m; renderTaskModules(); }); }
   if (name === 'teacher') { renderResults(); renderManageModules(); }
   if (name === 'join' && state.isTeacher) crPopulateModules();
   if (name === 'arbeid') { arbState.moduleIdx = null; arbRenderModuleGrid(); }
@@ -2399,15 +2399,19 @@ function editModule(idx) {
   showToast('✏️ Redigerer «'+m.name+'»');
 }
 
-function deleteModule(idx) {
+async function deleteModule(idx) {
   const m=state.modules[idx];
   if(!confirm(`Slett emnet «${m.name}»? Dette kan ikke angres.`))return;
   if(editingModuleIdx===idx)clearModuleForm();
+  const moduleId = m._id;
   state.modules.splice(idx,1);
-  saveModulesToStorage();
+  // Eksplisitt slett fra Supabase
+  if (moduleId) await DB.deleteModule(moduleId);
+  localStorage.setItem('lh_modules', JSON.stringify(state.modules));
   renderManageModules();
   renderHomeModules();
   renderTaskModules();
+  showToast('🗑 «' + m.name + '» slettet');
 }
 
 function toggleLock(idx) {
@@ -3052,6 +3056,7 @@ const DB = {
     });
     localStorage.setItem('lh_modules', JSON.stringify(modules));
 
+    // Upsert alle moduler til Supabase (aldri slett her – sletting skjer via deleteModule)
     for (let i = 0; i < modules.length; i++) {
       const m = modules[i];
       console.log('[DB] saveModules: upsert', m._id, '"' + m.name + '"');
@@ -3062,16 +3067,13 @@ const DB = {
       }
       console.log('[DB] saveModules: OK', m._id);
     }
-
-    if (modules.length > 0) {
-      const ids = modules.map(m => m._id).join(',');
-      console.log('[DB] saveModules: sletter gamle. Beholder IDer:', ids);
-      await this._q('DELETE', 'os_modules', 'id=not.in.(' + ids + ')');
-    } else {
-      await this._q('DELETE', 'os_modules', 'sort_order=gte.0');
-    }
     console.log('[DB] saveModules: FERDIG ✅');
     return true;
+  },
+
+  async deleteModule(moduleId) {
+    console.log('[DB] deleteModule:', moduleId);
+    await this._q('DELETE', 'os_modules', 'id=eq.' + moduleId);
   },
 
   // ── ELEVSVAR ──────────────────────────────────────────────────────
