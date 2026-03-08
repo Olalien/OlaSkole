@@ -1,12 +1,14 @@
-<html lang="no"><head>
+<!DOCTYPE html>
+<html lang="no">
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OlaSkole – Interaktiv læringsplattform</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&amp;family=Fredoka+One&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
 <!-- Preload file-parsing libraries -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer=""></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js" defer=""></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" defer=""></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" defer></script>
 <style>
   :root {
     --c1:#FF6B6B;--c2:#FFD93D;--c3:#6BCB77;--c4:#4D96FF;--c5:#C77DFF;
@@ -543,10 +545,10 @@
   .mc-edit-btn:hover { background: var(--c4); color: white; border-color: var(--c4); transform: scale(1.1); }
   body.dark .mc-edit-btn { background: rgba(30,30,48,0.92); border-color: rgba(255,255,255,0.15); color: white; }
 </style>
-<style id="confettiStyle">@keyframes confettiFall{to{transform:translateY(110vh) rotate(720deg);opacity:0;}}</style></head>
+</head>
 <body>
 
-<div class="progress-top"><div class="progress-fill" id="progressFill" style="width: 20%;"></div></div>
+<div class="progress-top"><div class="progress-fill" id="progressFill"></div></div>
 
 <nav>
   <div class="logo" onclick="showView('home')" style="cursor:pointer;" title="Tilbake til hjem">Ola<span>Skole</span></div>
@@ -555,11 +557,11 @@
     <button class="nav-tab" onclick="showView('tasks')" id="tasksTab">📚 Oppgaver</button>
     <button class="nav-tab" onclick="showView('join')" id="quizNavBtn" style="background:linear-gradient(135deg,var(--c5),#a855f7);color:white;">🎮 Quiz</button>
     <button class="nav-tab" onclick="arbOpen()" id="arbNavBtn" style="background:linear-gradient(135deg,var(--c3),#22c55e);color:white;">📚 Arbeid</button>
-    <button class="nav-tab teacher-tab" onclick="checkTeacher()" style="display: inline-flex;">🖊️ Lærerrom</button>
-    <button class="nav-tab teacher-tab" onclick="openSettings()" style="display: inline-flex; position: relative;">⚙️ Innstillinger<span id="dbNavPill" style="position: absolute; top: 4px; right: 6px; width: 9px; height: 9px; border-radius: 50%; background: rgb(5, 150, 105); display: inline-block; font-size: 0px; border: 2px solid white;" title="Database: Supabase tilkoblet"></span></button>
+    <button class="nav-tab teacher-tab" onclick="checkTeacher()" style="display:none">🖊️ Lærerrom</button>
+    <button class="nav-tab teacher-tab" onclick="openSettings()" style="display:none;position:relative;">⚙️ Innstillinger<span id="dbNavPill" style="position:absolute;top:4px;right:6px;width:9px;height:9px;border-radius:50%;background:#f59e0b;display:none;font-size:0;border:2px solid white;" title="Database: ikke konfigurert"></span></button>
   </div>
   <div class="nav-right">
-    <div class="role-badge" id="roleBadge">🎓 ryth</div>
+    <div class="role-badge" id="roleBadge">👤 Gjest</div>
     <button class="dark-toggle" id="darkToggle" onclick="toggleDark()" title="Mørkt modus">🌙</button>
     <button class="teacher-btn" onclick="openTeacherModal()">🔑 Lærer</button>
   </div>
@@ -580,7 +582,7 @@
     <button class="mob-nav-btn" id="mob-join" onclick="showView('join')">
       <span class="mob-icon">🎮</span>Quiz
     </button>
-    <button class="mob-nav-btn teacher-tab" id="mob-teacher" onclick="checkTeacher()" style="display: inline-flex;">
+    <button class="mob-nav-btn teacher-tab" id="mob-teacher" onclick="checkTeacher()" style="display:none">
       <span class="mob-icon">🖊️</span>Lærer
     </button>
   </div>
@@ -610,45 +612,38 @@
 
   <!-- Login / welcome card -->
   <div style="max-width:440px;margin:0 auto 1.75rem;">
-    <div class="student-login-box" id="studentLoginBox" style="display: none;">
+    <div class="student-login-box" id="studentLoginBox">
       <h2>👋 Hvem er du?</h2>
-      <input type="text" id="studentName" placeholder="Ditt navn">
-      <input type="text" id="studentClass" placeholder="Klasse (f.eks. 9B)">
+      <input type="text" id="studentName" placeholder="Ditt navn" />
+      <input type="text" id="studentClass" placeholder="Klasse (f.eks. 9B)" />
       <button class="btn-primary" style="width:100%;margin-top:0.25rem;" onclick="studentLogin()">Start læring! 🚀</button>
     </div>
 
-    <div id="welcomeBack" style="display: block;">
+    <div id="welcomeBack" style="display:none;">
       <div class="welcome-back-card">
         <div style="font-size:2.2rem;margin-bottom:0.4rem;">👋</div>
-        <div style="font-family:'Fredoka One',cursive;font-size:1.35rem;margin-bottom:0.1rem;" id="welcomeName">Hei, ryth! 👋</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:1.35rem;margin-bottom:0.1rem;" id="welcomeName"></div>
         <div style="font-size:0.88rem;opacity:0.8;" id="welcomeClass"></div>
         <div id="studentProgressWrap" style="margin-top:0.75rem;background:rgba(255,255,255,0.2);border-radius:50px;height:8px;overflow:hidden;"><div id="studentProgressBar" style="height:100%;background:var(--c2);border-radius:50px;width:0%;transition:width 0.6s ease;"></div></div>
-        <div id="studentProgressLabel" style="font-size:0.75rem;opacity:0.75;margin-top:0.3rem;font-weight:700;">0% fullført (0/6 aktiviteter)</div>
+        <div id="studentProgressLabel" style="font-size:0.75rem;opacity:0.75;margin-top:0.3rem;font-weight:700;"></div>
         <button onclick="studentLogout()" style="margin-top:0.75rem;background:rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.4);color:white;padding:6px 16px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.8rem;cursor:pointer;">Bytt bruker</button>
       </div>
     </div>
   </div>
 
-  <div class="badge-area" id="badgeArea" style="display: flex; justify-content: center;"><div class="badge"><span class="badge-icon">🌱</span>Begynn å løse oppgaver!</div></div>
+  <div class="badge-area" id="badgeArea" style="display:none; justify-content:center;"></div>
 
   <!-- Module search + grid -->
   <div id="homeModules">
     <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.1rem;flex-wrap:wrap;">
       <div class="section-title" style="margin-bottom:0;flex:1;">📖 Emner</div>
       <div style="position:relative;">
-        <input type="text" id="moduleSearch" placeholder="🔍 Søk emner..." oninput="filterHomeModules()" style="padding:8px 14px 8px 14px;border:2px solid #e0e0e0;border-radius:50px;font-family:'Nunito',sans-serif;font-size:0.88rem;outline:none;width:180px;transition:border 0.2s;" onfocus="this.style.borderColor='var(--c4)'" onblur="this.style.borderColor='#e0e0e0'">
+        <input type="text" id="moduleSearch" placeholder="🔍 Søk emner..." oninput="filterHomeModules()" style="padding:8px 14px 8px 14px;border:2px solid #e0e0e0;border-radius:50px;font-family:'Nunito',sans-serif;font-size:0.88rem;outline:none;width:180px;transition:border 0.2s;" onfocus="this.style.borderColor='var(--c4)'" onblur="this.style.borderColor='#e0e0e0'" />
       </div>
     </div>
     <div id="subjectFilter" style="display:flex;gap:0.45rem;flex-wrap:wrap;margin-bottom:1rem;"></div>
-    <div class="modules-grid" id="homeModulesGrid"><div class="module-card color-1" style="position:relative;" onclick="openModule(0)" data-module-name="Demokrati og samfunn" data-module-subject="🗳️">
-      
-      <span class="mc-emoji">🗳️</span>
-      <h3>Demokrati og samfunn</h3>
-      <p>Hva er demokrati, og hvordan fungerer det?</p>
-      <span class="task-count">11 oppgaver</span>
-      
-    </div></div>
-    <div class="empty-state" id="homeEmpty" style="display: none;">
+    <div class="modules-grid" id="homeModulesGrid"></div>
+    <div class="empty-state" id="homeEmpty">
       <span class="es-icon">📭</span>
       <h3>Ingen emner ennå</h3>
       <p>Læreren din har ikke lagt inn noe innhold ennå.</p>
@@ -660,13 +655,7 @@
 <div class="view" id="view-tasks">
   <div id="moduleList">
     <div class="section-title">📚 Alle emner</div>
-    <div class="modules-grid" id="taskModulesGrid"><div class="module-card color-1" style="position:relative;" onclick="openModule(0)">
-      
-      <span class="mc-emoji">🗳️</span>
-      <h3>Demokrati og samfunn</h3>
-      <p>Hva er demokrati, og hvordan fungerer det?</p>
-      <span class="task-count">11 oppgaver</span>
-    </div></div>
+    <div class="modules-grid" id="taskModulesGrid"></div>
     <div class="empty-state" id="taskEmpty" style="display:none">
       <span class="es-icon">📭</span>
       <h3>Ingen emner ennå</h3>
@@ -691,10 +680,10 @@
   <div class="tr-header">
     <div class="section-title" style="margin-bottom:0;">⚙️ Lærerrom</div>
     <div class="tr-tabs">
-      <button class="tr-tab active" id="trtab-new" onclick="trTab('new')">➕ Nytt emne</button>
-      <button class="tr-tab" id="trtab-emner" onclick="trTab('emner')">📦 Emner</button>
-      <button class="tr-tab" id="trtab-results" onclick="trTab('results')">📊 Resultater</button>
-      <button class="tr-tab" id="trtab-klasser" onclick="trTab('klasser')">🏫 Klasser</button>
+      <button class="tr-tab active" id="trtab-new"    onclick="trTab('new')">➕ Nytt emne</button>
+      <button class="tr-tab"        id="trtab-emner"  onclick="trTab('emner')">📦 Emner</button>
+      <button class="tr-tab"        id="trtab-results" onclick="trTab('results')">📊 Resultater</button>
+      <button class="tr-tab"        id="trtab-klasser" onclick="trTab('klasser')">🏫 Klasser</button>
     </div>
   </div>
 
@@ -719,15 +708,15 @@
       <div style="display:grid;grid-template-columns:1fr 1fr 80px;gap:0.875rem;margin-bottom:0.875rem;flex-wrap:wrap;" class="form-grid-3">
         <div class="form-row" style="margin:0">
           <label>Emnenavn</label>
-          <input type="text" id="moduleName" placeholder="f.eks. Andre verdenskrig" oninput="updatePublishBarHint()">
+          <input type="text" id="moduleName" placeholder="f.eks. Andre verdenskrig" oninput="updatePublishBarHint()" />
         </div>
         <div class="form-row" style="margin:0">
           <label>Kort beskrivelse</label>
-          <input type="text" id="moduleDesc" placeholder="Hva handler emnet om?">
+          <input type="text" id="moduleDesc" placeholder="Hva handler emnet om?" />
         </div>
         <div class="form-row" style="margin:0">
           <label>Ikon</label>
-          <input type="text" id="moduleEmoji" placeholder="📚" maxlength="2" value="📚">
+          <input type="text" id="moduleEmoji" placeholder="📚" maxlength="2" value="📚" />
         </div>
       </div>
       <div class="form-row" style="margin:0">
@@ -750,7 +739,7 @@
             <label style="display:block;font-weight:800;font-size:0.78rem;opacity:0.7;margin-bottom:0.35rem;text-transform:uppercase;letter-spacing:0.5px;">🎓 Klassetrinn</label>
             <select id="aiClass" style="width:100%;padding:9px 11px;border-radius:10px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.88rem;background:#2d2d44;color:white;outline:none;">
               <option value="8. trinn">8. trinn</option>
-              <option value="9. trinn" selected="">9. trinn</option>
+              <option value="9. trinn" selected>9. trinn</option>
               <option value="10. trinn">10. trinn</option>
               <option value="8–10. trinn">8–10. trinn</option>
             </select>
@@ -759,7 +748,7 @@
             <label style="display:block;font-weight:800;font-size:0.78rem;opacity:0.7;margin-bottom:0.35rem;text-transform:uppercase;letter-spacing:0.5px;">⚡ Vanskelighetsgrad</label>
             <select id="aiDifficulty" style="width:100%;padding:9px 11px;border-radius:10px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.88rem;background:#2d2d44;color:white;outline:none;">
               <option value="enkel">🟢 Enkel</option>
-              <option value="middels" selected="">🟡 Middels</option>
+              <option value="middels" selected>🟡 Middels</option>
               <option value="krevende">🔴 Krevende</option>
             </select>
           </div>
@@ -767,7 +756,7 @@
             <label style="display:block;font-weight:800;font-size:0.78rem;opacity:0.7;margin-bottom:0.35rem;text-transform:uppercase;letter-spacing:0.5px;">❓ Quiz-spørsmål</label>
             <select id="aiQuizCount" style="width:100%;padding:9px 11px;border-radius:10px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.88rem;background:#2d2d44;color:white;outline:none;">
               <option value="0">0</option><option value="1">1</option><option value="2">2</option>
-              <option value="3" selected="">3</option><option value="4">4</option><option value="5">5</option>
+              <option value="3" selected>3</option><option value="4">4</option><option value="5">5</option>
               <option value="6">6</option><option value="8">8</option><option value="10">10</option>
               <option value="12">12</option><option value="15">15</option><option value="20">20</option><option value="30">30</option>
             </select>
@@ -776,21 +765,21 @@
             <label style="display:block;font-weight:800;font-size:0.78rem;opacity:0.7;margin-bottom:0.35rem;text-transform:uppercase;letter-spacing:0.5px;">🃏 Flashcards</label>
             <select id="aiFcCount" style="width:100%;padding:9px 11px;border-radius:10px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.88rem;background:#2d2d44;color:white;outline:none;">
               <option value="0">0</option><option value="2">2</option><option value="3">3</option>
-              <option value="4" selected="">4</option><option value="5">5</option><option value="6">6</option>
+              <option value="4" selected>4</option><option value="5">5</option><option value="6">6</option>
               <option value="8">8</option><option value="10">10</option><option value="15">15</option><option value="20">20</option>
             </select>
           </div>
           <div>
             <label style="display:block;font-weight:800;font-size:0.78rem;opacity:0.7;margin-bottom:0.35rem;text-transform:uppercase;letter-spacing:0.5px;">💬 Drøftingsspm.</label>
             <select id="aiDiscCount" style="width:100%;padding:9px 11px;border-radius:10px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.88rem;background:#2d2d44;color:white;outline:none;">
-              <option value="0">0</option><option value="1" selected="">1</option><option value="2">2</option>
+              <option value="0">0</option><option value="1" selected>1</option><option value="2">2</option>
               <option value="3">3</option><option value="4">4</option><option value="5">5</option>
             </select>
           </div>
           <div>
             <label style="display:block;font-weight:800;font-size:0.78rem;opacity:0.7;margin-bottom:0.35rem;text-transform:uppercase;letter-spacing:0.5px;">✍️ Skriveoppgave</label>
             <select id="aiWriteTask" style="width:100%;padding:9px 11px;border-radius:10px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.88rem;background:#2d2d44;color:white;outline:none;">
-              <option value="ja" selected="">✅ Ja</option>
+              <option value="ja" selected>✅ Ja</option>
               <option value="nei">❌ Nei</option>
             </select>
           </div>
@@ -802,8 +791,11 @@
         <div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:1rem;">
           <label style="display:block;font-weight:800;font-size:0.78rem;opacity:0.7;margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:0.5px;">📚 Fag / tema (valgfritt)</label>
           <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.75rem;">
-            <input type="text" id="aiSubjectFree" placeholder="F.eks. Naturfag, Norsk, Fotball, Minecraft…" style="flex:1;min-width:180px;padding:9px 11px;border-radius:10px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.88rem;background:#2d2d44;color:white;outline:none;" oninput="syncAiSubjectFree(this.value)">
-            <select id="aiSubject" onchange="updateCompetenceGoals();syncAiSubjectFromSelect(this.value)" style="flex:1;min-width:140px;padding:9px 11px;border-radius:10px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.88rem;background:#2d2d44;color:white;outline:none;">
+            <input type="text" id="aiSubjectFree" placeholder="F.eks. Naturfag, Norsk, Fotball, Minecraft…"
+              style="flex:1;min-width:180px;padding:9px 11px;border-radius:10px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.88rem;background:#2d2d44;color:white;outline:none;"
+              oninput="syncAiSubjectFree(this.value)" />
+            <select id="aiSubject" onchange="updateCompetenceGoals();syncAiSubjectFromSelect(this.value)"
+              style="flex:1;min-width:140px;padding:9px 11px;border-radius:10px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.88rem;background:#2d2d44;color:white;outline:none;">
               <option value="">— Eller velg skolefag —</option>
               <option value="norsk">Norsk</option><option value="matematikk">Matematikk</option>
               <option value="engelsk">Engelsk</option><option value="naturfag">Naturfag</option>
@@ -815,7 +807,7 @@
           </div>
           <div id="aiGoalRow" style="margin-bottom:0.75rem;">
             <label style="display:block;font-weight:800;font-size:0.78rem;opacity:0.7;margin-bottom:0.35rem;text-transform:uppercase;letter-spacing:0.5px;">🎯 Kompetansemål (valgfritt)</label>
-            <select id="aiGoalSelect" style="width:100%;padding:9px 11px;border-radius:10px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.85rem;background:#2d2d44;color:white;outline:none;" disabled="">
+            <select id="aiGoalSelect" style="width:100%;padding:9px 11px;border-radius:10px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.85rem;background:#2d2d44;color:white;outline:none;" disabled>
               <option value="">— Velg skolefag over for å se kompetansemål —</option>
             </select>
           </div>
@@ -830,13 +822,17 @@
 
       <!-- File upload row -->
       <div style="margin-bottom:1.1rem;">
-        <div id="dropZoneFile" onclick="document.getElementById('fileUploadInput').click()" style="border:2px dashed rgba(255,255,255,0.25);border-radius:14px;padding:1.1rem 1.5rem;cursor:pointer;background:rgba(255,255,255,0.06);transition:all 0.2s;display:flex;align-items:center;gap:1rem;" ondragover="event.preventDefault();this.style.background='rgba(255,255,255,0.12)'" ondragleave="this.style.background='rgba(255,255,255,0.06)'" ondrop="handleFileDrop(event)">
+        <div id="dropZoneFile" onclick="document.getElementById('fileUploadInput').click()"
+          style="border:2px dashed rgba(255,255,255,0.25);border-radius:14px;padding:1.1rem 1.5rem;cursor:pointer;background:rgba(255,255,255,0.06);transition:all 0.2s;display:flex;align-items:center;gap:1rem;"
+          ondragover="event.preventDefault();this.style.background='rgba(255,255,255,0.12)'"
+          ondragleave="this.style.background='rgba(255,255,255,0.06)'"
+          ondrop="handleFileDrop(event)">
           <span style="font-size:2rem;" id="dropIcon">📄</span>
           <div>
             <div style="font-weight:800;color:white;font-size:0.95rem;" id="dropLabel">Last opp dokument</div>
             <div style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-top:0.15rem;">PDF · DOCX · PPTX · TXT — maks 10 MB</div>
           </div>
-          <input type="file" id="fileUploadInput" accept=".pdf,.docx,.pptx,.txt,.doc" style="display:none" onchange="handleFileSelect(event)">
+          <input type="file" id="fileUploadInput" accept=".pdf,.docx,.pptx,.txt,.doc" style="display:none" onchange="handleFileSelect(event)" />
         </div>
         <div id="fileStatus" style="display:none;margin-top:0.6rem;padding:10px 14px;border-radius:10px;font-weight:700;font-size:0.88rem;"></div>
         <div id="filePreviewBox" style="display:none;margin-top:0.6rem;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);border-radius:12px;padding:0.875rem;">
@@ -875,12 +871,12 @@
 
       <!-- Task category tab bar -->
       <div class="task-cat-tabs" id="taskCatTabs">
-        <button class="task-cat-btn active" id="tcbtn-quiz" onclick="tcTab('quiz')">❓ Quiz</button>
-        <button class="task-cat-btn" id="tcbtn-disc" onclick="tcTab('disc')">💬 Drøfting</button>
-        <button class="task-cat-btn" id="tcbtn-write" onclick="tcTab('write')">✍️ Skriving</button>
-        <button class="task-cat-btn" id="tcbtn-video" onclick="tcTab('video')">🎬 Video</button>
-        <button class="task-cat-btn" id="tcbtn-fc" onclick="tcTab('fc')">🃏 Flashcards</button>
-        <button class="task-cat-btn" id="tcbtn-preview" onclick="tcTab('preview')">👁 Forhåndsvisning</button>
+        <button class="task-cat-btn active" id="tcbtn-quiz"  onclick="tcTab('quiz')">❓ Quiz</button>
+        <button class="task-cat-btn"        id="tcbtn-disc"  onclick="tcTab('disc')">💬 Drøfting</button>
+        <button class="task-cat-btn"        id="tcbtn-write" onclick="tcTab('write')">✍️ Skriving</button>
+        <button class="task-cat-btn"        id="tcbtn-video" onclick="tcTab('video')">🎬 Video</button>
+        <button class="task-cat-btn"        id="tcbtn-fc"    onclick="tcTab('fc')">🃏 Flashcards</button>
+        <button class="task-cat-btn"        id="tcbtn-preview" onclick="tcTab('preview')">👁 Forhåndsvisning</button>
       </div>
 
       <!-- QUIZ TAB -->
@@ -888,7 +884,7 @@
         <div class="ai-mini-box" style="background:linear-gradient(135deg,#f5f3ff,#eff6ff);border-color:#e9d5ff;">
           <div style="font-weight:800;font-size:0.92rem;color:var(--dark);margin-bottom:0.6rem;">✨ La AI lage et spørsmål</div>
           <div style="display:flex;gap:0.6rem;flex-wrap:wrap;align-items:flex-end;">
-            <input type="text" id="aiQuizTopic" placeholder="Tema eller stikkord, f.eks. «fotosyntese»" style="flex:1;min-width:160px;padding:9px 12px;border:2px solid #e0e0e0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.92rem;outline:none;">
+            <input type="text" id="aiQuizTopic" placeholder="Tema eller stikkord, f.eks. «fotosyntese»" style="flex:1;min-width:160px;padding:9px 12px;border:2px solid #e0e0e0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.92rem;outline:none;" />
             <button class="btn-ai" style="padding:9px 18px;font-size:0.88rem;" onclick="aiGenerateSingleQuiz()">
               <span>✨ Lag spørsmål</span><div class="ai-spinner" id="sqSpinner"></div>
             </button>
@@ -897,12 +893,12 @@
         </div>
         <div class="or-divider">— eller fyll inn manuelt —</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;" class="form-grid-2">
-          <div class="form-row" style="margin:0;grid-column:1/-1"><label>Spørsmål</label><input type="text" id="quizQ" placeholder="Hva er..."></div>
-          <div class="form-row" style="margin:0"><label>✅ Svar A (riktig)</label><input type="text" id="quizA" placeholder="Riktig svar"></div>
-          <div class="form-row" style="margin:0"><label>❌ Svar B</label><input type="text" id="quizB" placeholder="Feil svar"></div>
-          <div class="form-row" style="margin:0"><label>❌ Svar C</label><input type="text" id="quizC" placeholder="Feil svar"></div>
-          <div class="form-row" style="margin:0"><label>❌ Svar D</label><input type="text" id="quizD" placeholder="Feil svar"></div>
-          <div class="form-row" style="margin:0;grid-column:1/-1"><label>Forklaring ved riktig svar</label><input type="text" id="quizExplain" placeholder="Bra! Det er riktig fordi..."></div>
+          <div class="form-row" style="margin:0;grid-column:1/-1"><label>Spørsmål</label><input type="text" id="quizQ" placeholder="Hva er..." /></div>
+          <div class="form-row" style="margin:0"><label>✅ Svar A (riktig)</label><input type="text" id="quizA" placeholder="Riktig svar" /></div>
+          <div class="form-row" style="margin:0"><label>❌ Svar B</label><input type="text" id="quizB" placeholder="Feil svar" /></div>
+          <div class="form-row" style="margin:0"><label>❌ Svar C</label><input type="text" id="quizC" placeholder="Feil svar" /></div>
+          <div class="form-row" style="margin:0"><label>❌ Svar D</label><input type="text" id="quizD" placeholder="Feil svar" /></div>
+          <div class="form-row" style="margin:0;grid-column:1/-1"><label>Forklaring ved riktig svar</label><input type="text" id="quizExplain" placeholder="Bra! Det er riktig fordi..." /></div>
         </div>
         <button class="btn-success" style="margin-top:0.875rem;" onclick="addQuizQuestion()">✅ Legg til spørsmål</button>
         <div id="quizPreview" style="margin-top:0.875rem;"></div>
@@ -913,7 +909,7 @@
         <div class="ai-mini-box" style="background:linear-gradient(135deg,#fdf4ff,#fce7ff);border-color:#f0abfc;">
           <div style="font-weight:800;font-size:0.92rem;color:var(--dark);margin-bottom:0.6rem;">✨ La AI foreslå drøftingsspørsmål</div>
           <div style="display:flex;gap:0.6rem;flex-wrap:wrap;align-items:flex-end;">
-            <input type="text" id="aiDiscTopic" placeholder="Tema, f.eks. «klimaendringer»" style="flex:1;min-width:160px;padding:9px 12px;border:2px solid #e0e0e0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.92rem;outline:none;">
+            <input type="text" id="aiDiscTopic" placeholder="Tema, f.eks. «klimaendringer»" style="flex:1;min-width:160px;padding:9px 12px;border:2px solid #e0e0e0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.92rem;outline:none;" />
             <button style="background:linear-gradient(135deg,var(--c5),#a855f7);color:white;border:none;padding:9px 18px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.88rem;cursor:pointer;display:flex;align-items:center;gap:0.4rem;" onclick="aiGenerateSingleDisc()">
               <span>✨ Foreslå</span><div class="ai-spinner" id="sdSpinner"></div>
             </button>
@@ -931,7 +927,7 @@
         <div class="ai-mini-box" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-color:#86efac;">
           <div style="font-weight:800;font-size:0.92rem;color:var(--dark);margin-bottom:0.6rem;">✨ La AI lage en skriveoppgave</div>
           <div style="display:flex;gap:0.6rem;flex-wrap:wrap;align-items:flex-end;">
-            <input type="text" id="aiWriteTopic" placeholder="Tema, f.eks. «klimaendringer og eget ansvar»" style="flex:1;min-width:160px;padding:9px 12px;border:2px solid #e0e0e0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.92rem;outline:none;">
+            <input type="text" id="aiWriteTopic" placeholder="Tema, f.eks. «klimaendringer og eget ansvar»" style="flex:1;min-width:160px;padding:9px 12px;border:2px solid #e0e0e0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.92rem;outline:none;" />
             <button style="background:linear-gradient(135deg,var(--c3),#16a34a);color:white;border:none;padding:9px 18px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.88rem;cursor:pointer;display:flex;align-items:center;gap:0.4rem;" onclick="aiGenerateWriteTask()">
               <span>✨ Lag oppgave</span><div class="ai-spinner" id="swSpinner"></div>
             </button>
@@ -939,9 +935,9 @@
           <div id="swResult" style="display:none;margin-top:0.6rem;"></div>
         </div>
         <div class="or-divider">— eller fyll inn manuelt —</div>
-        <div class="form-row"><label>Oppgavetittel</label><input type="text" id="writeTitle" placeholder="Skriv et..."></div>
+        <div class="form-row"><label>Oppgavetittel</label><input type="text" id="writeTitle" placeholder="Skriv et..." /></div>
         <div class="form-row"><label>Instruksjon til eleven</label><textarea id="writeDesc" placeholder="Skriv minst 150 ord om..."></textarea></div>
-        <div class="form-row"><label>Minimum antall ord</label><input type="number" id="writeMin" placeholder="100" value="100" style="width:120px"></div>
+        <div class="form-row"><label>Minimum antall ord</label><input type="number" id="writeMin" placeholder="100" value="100" style="width:120px" /></div>
         <button class="btn-success" onclick="addWriteTask()">✅ Legg til skriveoppgave</button>
       </div>
 
@@ -951,7 +947,7 @@
           <div style="font-weight:800;font-size:0.92rem;color:var(--dark);margin-bottom:0.4rem;">✨ Finn YouTube-videoer med AI</div>
           <div style="font-size:0.8rem;color:#666;margin-bottom:0.75rem;">AI foreslår relevante videoer med forhåndsvisning – du velger hvilke du vil bruke.</div>
           <div style="display:flex;gap:0.6rem;flex-wrap:wrap;align-items:flex-end;">
-            <input type="text" id="aiVideoTopic" placeholder="Tema, f.eks. «fotosyntese» eller «2. verdenskrig»" style="flex:1;min-width:160px;padding:9px 12px;border:2px solid #e0e0e0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.92rem;outline:none;">
+            <input type="text" id="aiVideoTopic" placeholder="Tema, f.eks. «fotosyntese» eller «2. verdenskrig»" style="flex:1;min-width:160px;padding:9px 12px;border:2px solid #e0e0e0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.92rem;outline:none;" />
             <button style="background:linear-gradient(135deg,var(--c1),#dc2626);color:white;border:none;padding:9px 18px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.88rem;cursor:pointer;display:flex;align-items:center;gap:0.4rem;" onclick="aiGenerateVideo()">
               <span>✨ Finn videoer</span><div class="ai-spinner" id="svSpinner"></div>
             </button>
@@ -961,10 +957,10 @@
         <div class="or-divider">— eller lim inn YouTube-lenke manuelt —</div>
         <div class="form-row">
           <label>YouTube-lenke eller annen URL</label>
-          <input type="text" id="videoUrl" placeholder="https://www.youtube.com/watch?v=..." oninput="previewManualVideo()">
+          <input type="text" id="videoUrl" placeholder="https://www.youtube.com/watch?v=..." oninput="previewManualVideo()" />
         </div>
         <div id="manualVideoPreview" style="display:none;margin-bottom:0.875rem;"></div>
-        <div class="form-row"><label>Tittel på videoen</label><input type="text" id="videoTitle" placeholder="Automatisk hentet fra URL, eller skriv selv..."></div>
+        <div class="form-row"><label>Tittel på videoen</label><input type="text" id="videoTitle" placeholder="Automatisk hentet fra URL, eller skriv selv..." /></div>
         <div class="form-row"><label>Oppgave til elevene (valgfritt)</label><textarea id="videoTask" placeholder="Etter å ha sett videoen, svar på..."></textarea></div>
         <button class="btn-success" onclick="addVideo()">✅ Legg til video</button>
       </div>
@@ -974,7 +970,7 @@
         <div class="ai-mini-box" style="background:linear-gradient(135deg,#fff7ed,#fef3c7);border-color:#fcd34d;">
           <div style="font-weight:800;font-size:0.92rem;color:var(--dark);margin-bottom:0.6rem;">✨ La AI lage flashcards</div>
           <div style="display:flex;gap:0.6rem;flex-wrap:wrap;align-items:flex-end;">
-            <input type="text" id="aiFcTopic" placeholder="Tema, f.eks. «celler og biologi»" style="flex:1;min-width:160px;padding:9px 12px;border:2px solid #e0e0e0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.92rem;outline:none;">
+            <input type="text" id="aiFcTopic" placeholder="Tema, f.eks. «celler og biologi»" style="flex:1;min-width:160px;padding:9px 12px;border:2px solid #e0e0e0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.92rem;outline:none;" />
             <button style="background:linear-gradient(135deg,var(--c2),#f59e0b);color:var(--dark);border:none;padding:9px 18px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.88rem;cursor:pointer;display:flex;align-items:center;gap:0.4rem;" onclick="aiGenerateFlashcards()">
               <span>✨ Lag flashcards</span><div class="ai-spinner" id="fcAiSpinner"></div>
             </button>
@@ -982,8 +978,8 @@
           <div id="fcAiResult" style="display:none;margin-top:0.6rem;"></div>
         </div>
         <div class="or-divider">— eller legg til manuelt —</div>
-        <div class="form-row"><label>Begrep / spørsmål (forside)</label><input type="text" id="fcFront" placeholder="Demokrati"></div>
-        <div class="form-row"><label>Definisjon / svar (bakside)</label><input type="text" id="fcBack" placeholder="Et styresett der folket bestemmer..."></div>
+        <div class="form-row"><label>Begrep / spørsmål (forside)</label><input type="text" id="fcFront" placeholder="Demokrati" /></div>
+        <div class="form-row"><label>Definisjon / svar (bakside)</label><input type="text" id="fcBack" placeholder="Et styresett der folket bestemmer..." /></div>
         <button class="btn-success" onclick="addFlashcard()">✅ Legg til flashcard</button>
         <div id="fcPreview" style="margin-top:0.875rem;"></div>
       </div>
@@ -1012,24 +1008,7 @@
   <div class="tr-pane" id="trpane-emner">
     <div class="teacher-panel">
       <h2>📦 Publiserte emner</h2>
-      <div id="manageModulesList">
-    <div class="module-manage-card">
-      <div style="font-size:2rem;flex-shrink:0;">🗳️</div>
-      <div class="module-manage-info">
-        <div class="module-manage-name">Demokrati og samfunn</div>
-        <div class="module-manage-meta">
-          3 quiz · 2 drøfting · 4 flashcards · 1 skriveoppgaver
-          
-          
-          
-        </div>
-      </div>
-      <div class="module-manage-actions">
-        <button class="pv-edit-btn" style="font-size:0.85rem;padding:8px 14px;" onclick="editModule(0)">✏️ Rediger</button>
-        <button onclick="toggleLock(0)" style="background:#f0f0f0;color:#555;border:none;padding:8px 12px;border-radius:7px;font-size:0.82rem;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;">🔒 Lås</button>
-        <button class="pv-del-btn" style="font-size:0.85rem;padding:8px 14px;" onclick="deleteModule(0)">🗑 Slett</button>
-      </div>
-    </div></div>
+      <div id="manageModulesList"><p style="color:#aaa;">Ingen emner publisert ennå.</p></div>
     </div>
   </div>
 
@@ -1045,86 +1024,8 @@
         <button onclick="exportAllAnswersDocx()" style="background:var(--c4);color:white;border:none;padding:9px 18px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.82rem;cursor:pointer;">📄 Eksporter Word</button>
         <button onclick="exportAllAnswersTxt()" style="background:#22c55e;color:white;border:none;padding:9px 18px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.82rem;cursor:pointer;">📋 Eksporter tekst</button>
       </div>
-      <div id="resultStatsRow" style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1.25rem;">
-      <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border-radius:12px;padding:0.875rem 1.25rem;flex:1;min-width:120px;"><div style="font-size:1.6rem;font-weight:800;color:var(--c4);">5</div><div style="font-size:0.78rem;color:#555;font-weight:700;">Elever</div></div>
-      <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-radius:12px;padding:0.875rem 1.25rem;flex:1;min-width:120px;"><div style="font-size:1.6rem;font-weight:800;color:var(--c3);">1</div><div style="font-size:0.78rem;color:#555;font-weight:700;">Emner</div></div>
-      <div style="background:linear-gradient(135deg,#fdf4ff,#fce7ff);border-radius:12px;padding:0.875rem 1.25rem;flex:1;min-width:120px;"><div style="font-size:1.6rem;font-weight:800;color:var(--c5);">4</div><div style="font-size:0.78rem;color:#555;font-weight:700;">Totale svar</div></div></div>
-      <div id="resultsContainer">
-    <div style="border:2px solid #e8eaed;border-radius:14px;margin-bottom:0.75rem;overflow:hidden;">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:0.875rem 1rem;cursor:pointer;background:white;" onclick="toggleStudentResults('sr-test')">
-        <div>
-          <div style="font-weight:800;color:var(--dark);">👤 test</div>
-          <div style="font-size:0.78rem;color:#aaa;">3 svar</div>
-        </div>
-        <div style="display:flex;gap:0.4rem;align-items:center;">
-          <button onclick="event.stopPropagation();exportStudentAnswersTxt('test')" style="background:var(--c4);color:white;border:none;padding:5px 10px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.75rem;cursor:pointer;">📋 txt</button>
-          <span style="color:#aaa;font-size:1rem;">▼</span>
-        </div>
-      </div>
-      <div id="sr-test" style="display:none;padding:0.875rem 1rem;background:#fafafa;border-top:1px solid #f0f0f0;">
-        <div style="font-size:0.85rem;color:#555;padding:0.4rem 0;border-bottom:1px solid #f0f0f0;">write_0: dette er en test</div><div style="font-size:0.85rem;color:#555;padding:0.4rem 0;border-bottom:1px solid #f0f0f0;">quiz_0: false</div><div style="font-size:0.85rem;color:#555;padding:0.4rem 0;border-bottom:1px solid #f0f0f0;">quiz_1: true</div>
-      </div>
-    </div>
-    <div style="border:2px solid #e8eaed;border-radius:14px;margin-bottom:0.75rem;overflow:hidden;">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:0.875rem 1rem;cursor:pointer;background:white;" onclick="toggleStudentResults('sr-Ola')">
-        <div>
-          <div style="font-weight:800;color:var(--dark);">👤 Ola</div>
-          <div style="font-size:0.78rem;color:#aaa;">1 svar</div>
-        </div>
-        <div style="display:flex;gap:0.4rem;align-items:center;">
-          <button onclick="event.stopPropagation();exportStudentAnswersTxt('Ola')" style="background:var(--c4);color:white;border:none;padding:5px 10px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.75rem;cursor:pointer;">📋 txt</button>
-          <span style="color:#aaa;font-size:1rem;">▼</span>
-        </div>
-      </div>
-      <div id="sr-Ola" style="display:none;padding:0.875rem 1rem;background:#fafafa;border-top:1px solid #f0f0f0;">
-        <div style="font-size:0.85rem;color:#555;padding:0.4rem 0;border-bottom:1px solid #f0f0f0;">quiz_0: wrong</div>
-      </div>
-    </div>
-    <div style="border:2px solid #e8eaed;border-radius:14px;margin-bottom:0.75rem;overflow:hidden;">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:0.875rem 1rem;cursor:pointer;background:white;" onclick="toggleStudentResults('sr-Håkon')">
-        <div>
-          <div style="font-weight:800;color:var(--dark);">👤 Håkon</div>
-          <div style="font-size:0.78rem;color:#aaa;">0 svar</div>
-        </div>
-        <div style="display:flex;gap:0.4rem;align-items:center;">
-          <button onclick="event.stopPropagation();exportStudentAnswersTxt('Håkon')" style="background:var(--c4);color:white;border:none;padding:5px 10px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.75rem;cursor:pointer;">📋 txt</button>
-          <span style="color:#aaa;font-size:1rem;">▼</span>
-        </div>
-      </div>
-      <div id="sr-Håkon" style="display:none;padding:0.875rem 1rem;background:#fafafa;border-top:1px solid #f0f0f0;">
-        <p style="color:#aaa;font-size:0.88rem;">Ingen svar ennå.</p>
-      </div>
-    </div>
-    <div style="border:2px solid #e8eaed;border-radius:14px;margin-bottom:0.75rem;overflow:hidden;">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:0.875rem 1rem;cursor:pointer;background:white;" onclick="toggleStudentResults('sr-Twst')">
-        <div>
-          <div style="font-weight:800;color:var(--dark);">👤 Twst</div>
-          <div style="font-size:0.78rem;color:#aaa;">0 svar</div>
-        </div>
-        <div style="display:flex;gap:0.4rem;align-items:center;">
-          <button onclick="event.stopPropagation();exportStudentAnswersTxt('Twst')" style="background:var(--c4);color:white;border:none;padding:5px 10px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.75rem;cursor:pointer;">📋 txt</button>
-          <span style="color:#aaa;font-size:1rem;">▼</span>
-        </div>
-      </div>
-      <div id="sr-Twst" style="display:none;padding:0.875rem 1rem;background:#fafafa;border-top:1px solid #f0f0f0;">
-        <p style="color:#aaa;font-size:0.88rem;">Ingen svar ennå.</p>
-      </div>
-    </div>
-    <div style="border:2px solid #e8eaed;border-radius:14px;margin-bottom:0.75rem;overflow:hidden;">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:0.875rem 1rem;cursor:pointer;background:white;" onclick="toggleStudentResults('sr-ryth')">
-        <div>
-          <div style="font-weight:800;color:var(--dark);">👤 ryth</div>
-          <div style="font-size:0.78rem;color:#aaa;">0 svar</div>
-        </div>
-        <div style="display:flex;gap:0.4rem;align-items:center;">
-          <button onclick="event.stopPropagation();exportStudentAnswersTxt('ryth')" style="background:var(--c4);color:white;border:none;padding:5px 10px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.75rem;cursor:pointer;">📋 txt</button>
-          <span style="color:#aaa;font-size:1rem;">▼</span>
-        </div>
-      </div>
-      <div id="sr-ryth" style="display:none;padding:0.875rem 1rem;background:#fafafa;border-top:1px solid #f0f0f0;">
-        <p style="color:#aaa;font-size:0.88rem;">Ingen svar ennå.</p>
-      </div>
-    </div></div>
+      <div id="resultStatsRow" style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1.25rem;"></div>
+      <div id="resultsContainer"><p style="color:#aaa;">Ingen svar registrert ennå.</p></div>
     </div>
   </div>
 
@@ -1145,7 +1046,7 @@
 
 
 <!-- SETTINGS MODAL -->
-<div class="modal-overlay open" id="settingsModal">
+<div class="modal-overlay" id="settingsModal">
   <div class="modal" style="max-width:500px;width:95%;max-height:90vh;overflow-y:auto;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
       <h2 style="margin:0;font-size:1.5rem;">⚙️ Innstillinger</h2>
@@ -1156,9 +1057,9 @@
     <div style="background:linear-gradient(135deg,#f5f3ff,#eff6ff);border-radius:14px;padding:1.25rem;margin-bottom:1.25rem;border:2px solid #e9d5ff;">
       <div style="font-weight:800;font-size:1rem;color:var(--dark);margin-bottom:0.25rem;">🔑 Anthropic API-nøkkel</div>
       <div style="font-size:0.85rem;color:#888;margin-bottom:1rem;">Nødvendig for AI-generering. Lagres kun lokalt i nettleseren.</div>
-      <div id="settingsApiStatus" style="margin-bottom: 0.75rem; font-size: 0.88rem; font-weight: 700; display: block; color: var(--c3);">✅ API-nøkkel lagret</div>
+      <div id="settingsApiStatus" style="margin-bottom:0.75rem;font-size:0.88rem;font-weight:700;"></div>
       <div style="position:relative;margin-bottom:0.75rem;">
-        <input type="password" id="settingsApiInput" placeholder="sk-ant-api03-..." style="width:100%;padding:11px 46px 11px 14px;border:2px solid #e0e0e0;border-radius:10px;font-family:monospace;font-size:0.9rem;outline:none;box-sizing:border-box;">
+        <input type="password" id="settingsApiInput" placeholder="sk-ant-api03-..." style="width:100%;padding:11px 46px 11px 14px;border:2px solid #e0e0e0;border-radius:10px;font-family:monospace;font-size:0.9rem;outline:none;box-sizing:border-box;" />
         <button onclick="toggleSettingsKeyVis()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;" id="settingsEyeBtn">👁</button>
       </div>
       <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
@@ -1177,7 +1078,7 @@
       <div style="font-weight:800;font-size:1rem;color:var(--dark);margin-bottom:0.25rem;">🔐 Endre lærerpassord</div>
       <div style="font-size:0.85rem;color:#888;margin-bottom:1rem;">Passordendringen gjelder kun denne nettlesersesjonen.</div>
       <div class="form-row" style="margin-bottom:0.75rem;">
-        <input type="password" id="newPassInput" placeholder="Nytt passord" style="padding:11px 14px;border:2px solid #e0e0e0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.95rem;outline:none;width:100%;">
+        <input type="password" id="newPassInput" placeholder="Nytt passord" style="padding:11px 14px;border:2px solid #e0e0e0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.95rem;outline:none;width:100%;" />
       </div>
       <button class="btn-success" style="padding:10px 20px;font-size:0.9rem;" onclick="changePassword()">💾 Lagre nytt passord</button>
       <div id="passFeedback" style="display:none;margin-top:0.75rem;padding:10px 14px;border-radius:10px;font-weight:700;font-size:0.88rem;"></div>
@@ -1191,7 +1092,7 @@
       </div>
       <div style="background:white;border-radius:10px;padding:1rem;border:2px solid #dbeafe;margin-bottom:0.875rem;">
         <div style="font-weight:800;font-size:0.88rem;color:var(--dark);margin-bottom:0.6rem;">🔑 Microsoft App-ID (Azure)</div>
-        <input type="text" id="msClientId" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" style="width:100%;padding:10px 12px;border:2px solid #e0e0e0;border-radius:8px;font-family:monospace;font-size:0.85rem;outline:none;margin-bottom:0.6rem;">
+        <input type="text" id="msClientId" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" style="width:100%;padding:10px 12px;border:2px solid #e0e0e0;border-radius:8px;font-family:monospace;font-size:0.85rem;outline:none;margin-bottom:0.6rem;" />
         <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
           <button onclick="saveMsClientId()" style="background:var(--c4);color:white;border:none;padding:8px 16px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.82rem;cursor:pointer;">💾 Lagre</button>
           <button onclick="testMsLogin()" id="msTestBtn" style="background:#0078d4;color:white;border:none;padding:8px 16px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.82rem;cursor:pointer;">🔗 Test innlogging</button>
@@ -1212,60 +1113,52 @@
 
     <!-- DATABASE SECTION -->
     <div style="background:linear-gradient(135deg,#ecfdf5,#d1fae5);border-radius:14px;padding:1.25rem;margin-top:1.25rem;border:2px solid #6ee7b7;">
-      <div style="font-weight:800;font-size:1rem;color:var(--dark);margin-bottom:0.2rem;">🗄️ Database – Supabase</div>
-      <div style="font-size:0.82rem;color:#555;margin-bottom:1rem;line-height:1.6;">
-        Koble til en gratis Supabase-database for å lagre emner, elevsvar og fremdrift på tvers av alle enheter og nettlesere.
+      <div style="font-weight:800;font-size:1rem;color:var(--dark);margin-bottom:0.75rem;">🗄️ Database – Supabase</div>
+
+      <div id="dbStatus" style="margin-bottom:1rem;padding:0.75rem 1rem;border-radius:10px;font-size:0.88rem;font-weight:700;background:#fff7ed;color:#92400e;">
+        ⏳ Sjekker…
       </div>
 
-      <div id="dbStatus" style="margin-bottom: 0.875rem; padding: 0.6rem 0.875rem; border-radius: 10px; font-size: 0.85rem; font-weight: 700; background: rgb(220, 252, 231); color: rgb(22, 101, 52);">✅ Tilkoblet: uzufgmhuihvjxlvvspwy.supabase.co</div>
-
-      <div style="margin-bottom:0.6rem;">
-        <label style="display:block;font-size:0.82rem;font-weight:800;color:#555;margin-bottom:0.3rem;">Project URL</label>
-        <input type="text" id="sbUrlInput" placeholder="https://xxxxxxxxxxxx.supabase.co" style="width:100%;padding:9px 12px;border:2px solid #a7f3d0;border-radius:10px;font-family:monospace;font-size:0.82rem;outline:none;box-sizing:border-box;">
-      </div>
-      <div style="margin-bottom:0.875rem;">
-        <label style="display:block;font-size:0.82rem;font-weight:800;color:#555;margin-bottom:0.3rem;">Anon / Public API Key</label>
-        <input type="password" id="sbKeyInput" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9…" style="width:100%;padding:9px 12px;border:2px solid #a7f3d0;border-radius:10px;font-family:monospace;font-size:0.82rem;outline:none;box-sizing:border-box;">
-      </div>
-
-      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.875rem;">
-        <button onclick="saveDbConfig()" style="background:#059669;color:white;border:none;padding:9px 18px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.85rem;cursor:pointer;">💾 Koble til</button>
-        <button onclick="testDbConnection()" style="background:var(--c4);color:white;border:none;padding:9px 16px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.85rem;cursor:pointer;">🧪 Test tilkobling</button>
-        <button onclick="runDbDiagnose()" style="background:#0f172a;color:#a3e635;border:none;padding:9px 16px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.85rem;cursor:pointer;">🔬 Full diagnose</button>
-        <button onclick="migrateToDb()" style="background:#7c3aed;color:white;border:none;padding:9px 16px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.85rem;cursor:pointer;">📤 Migrer lokale data</button>
-        <button onclick="clearDbConfig()" style="background:none;border:2px solid #fca5a5;color:var(--c1);padding:9px 14px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.82rem;cursor:pointer;">🗑 Fjern</button>
-      </div>
-
-      <!-- KEY STEP: embed key into downloadable file -->
-      <div style="background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:12px;padding:1rem;margin-bottom:0.875rem;">
-        <div style="font-weight:800;font-size:0.88rem;color:#92400e;margin-bottom:0.4rem;">🔑 Steg 2 – Bak nøkkelen inn i filen</div>
-        <div style="font-size:0.78rem;color:#78350f;line-height:1.7;margin-bottom:0.75rem;">
-          Etter at du har koblet til Supabase: last ned en ny versjon av HTML-filen med nøkkelen innbakt.
-          <b>Last denne opp til GitHub Pages</b> – da fungerer databasen automatisk på alle enheter uten at noen trenger å sette opp noe.
+      <!-- Status: tabeller mangler -->
+      <div id="dbSqlWarning" style="display:none;background:#fef2f2;border:2px solid #fca5a5;border-radius:10px;padding:0.875rem;margin-bottom:1rem;">
+        <div style="font-weight:800;color:#991b1b;margin-bottom:0.5rem;">⚠️ Databasetabellene er ikke opprettet!</div>
+        <div style="font-size:0.82rem;color:#7f1d1d;line-height:1.7;margin-bottom:0.75rem;">
+          Gå til <b>supabase.com → ditt prosjekt → SQL Editor</b>, kopier SQL-skjemaet under og kjør det. Gjør dette én gang.
         </div>
-        <button onclick="saveKeyToFile()" style="background:#d97706;color:white;border:none;padding:9px 20px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.85rem;cursor:pointer;">⬇️ Last ned fil med nøkkel innbakt</button>
+        <button onclick="copyDbSchema()" style="background:#dc2626;color:white;border:none;padding:9px 20px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.88rem;cursor:pointer;">📋 Kopier SQL-skjema</button>
+        <button onclick="testDbConnection()" style="background:#6b7280;color:white;border:none;padding:9px 16px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.88rem;cursor:pointer;margin-left:0.5rem;">🔄 Test på nytt</button>
       </div>
 
-      <div id="dbFeedback" style="display: block; padding: 0.6rem 0.875rem; border-radius: 10px; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.875rem; background: rgb(220, 252, 231); color: rgb(22, 101, 52);">✅ Ferdig! 1 emner, 0 svar, 4 elever migrert.</div>
-      <div id="dbDiagnosePanel" style="display: block; background: rgb(15, 23, 42); border-radius: 12px; padding: 1rem; margin-bottom: 0.875rem; max-height: 300px; overflow-y: auto;">
-        <div style="font-family:monospace;font-size:0.75rem;color:#a3e635;" id="dbDiagnoseLog"><div style="color:#FFD93D;margin-bottom:2px;">🔬 OlaSkole DB Diagnose</div><div style="color:#aaa;margin-bottom:2px;">URL: https://uzufgmhuihvjxlvvspwy.supabase.co</div><div style="color:#aaa;margin-bottom:2px;">Nøkkel: eyJhbGciOiJIUzI1NiIs...</div><div style="color:#6BCB77;margin-bottom:2px;">_ready: true</div><div style="color:#a3e635;margin-bottom:2px;">─────────────────────────────</div><div style="color:#FFD93D;margin-bottom:2px;">TEST 1: Tilkobling...</div><div style="color:#6BCB77;margin-bottom:2px;">TEST 1: ✅ Tilkoblet (HTTP 200)</div><div style="color:#FFD93D;margin-bottom:2px;">TEST 2: Leser os_modules...</div><div style="color:#6BCB77;margin-bottom:2px;">TEST 2: ✅ 1 emner i databasen</div><div style="color:#aaa;margin-bottom:2px;">  1. id=mod_1772925211908_0_4qak</div><div style="color:#FFD93D;margin-bottom:2px;">TEST 3: Skriver testrad...</div><div style="color:#6BCB77;margin-bottom:2px;">TEST 3: ✅ Skriving OK</div><div style="color:#6BCB77;margin-bottom:2px;">TEST 3b: Les tilbake: ✅ OK</div><div style="color:#6BCB77;margin-bottom:2px;">TEST 3c: ✅ Opprydding OK</div><div style="color:#FFD93D;margin-bottom:2px;">TEST 4: Sjekker alle tabeller...</div><div style="color:#6BCB77;margin-bottom:2px;">  os_modules: ✅</div><div style="color:#6BCB77;margin-bottom:2px;">  os_answers: ✅</div><div style="color:#6BCB77;margin-bottom:2px;">  os_progress: ✅</div><div style="color:#6BCB77;margin-bottom:2px;">  os_feedback: ✅</div><div style="color:#6BCB77;margin-bottom:2px;">  os_roster: ✅</div><div style="color:#6BCB77;margin-bottom:2px;">  os_games: ✅</div><div style="color:#6BCB77;margin-bottom:2px;">  os_highscores: ✅</div><div style="color:#a3e635;margin-bottom:2px;">─────────────────────────────</div><div style="color:#FFD93D;margin-bottom:2px;">✅ Diagnose ferdig!</div></div>
+      <!-- Actions -->
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.875rem;">
+        <button onclick="runDbDiagnose()" style="background:#0f172a;color:#a3e635;border:none;padding:9px 18px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.88rem;cursor:pointer;">🔬 Kjør diagnose</button>
+        <button onclick="migrateToDb()" style="background:#7c3aed;color:white;border:none;padding:9px 16px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.88rem;cursor:pointer;">📤 Tving opplasting</button>
+        <button onclick="copyDbSchema()" style="background:#059669;color:white;border:none;padding:9px 16px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.88rem;cursor:pointer;">📋 Kopier SQL</button>
       </div>
 
-      <details open="">
-        <summary style="font-size:0.82rem;font-weight:800;color:#059669;cursor:pointer;">📋 Slik setter du opp Supabase (5 minutter, helt gratis)</summary>
-        <div style="font-size:0.78rem;color:#444;line-height:1.9;margin-top:0.75rem;background:rgba(255,255,255,0.8);border-radius:10px;padding:0.875rem;">
-          <b>1.</b> Gå til <a href="https://supabase.com" target="_blank" style="color:#059669;font-weight:800;">supabase.com</a> → «Start your project» → opprett gratis konto<br>
-          <b>2.</b> Klikk «New project», gi det et navn (f.eks. «olaskole»)<br>
-          <b>3.</b> Gå til <b>SQL Editor</b> i menyen til venstre<br>
-          <b>4.</b> Klikk knappen under for å kopiere SQL-skjemaet, lim det inn og kjør det<br>
-          <b>5.</b> Gå til <b>Project Settings → API</b> og kopier:<br>
-          &nbsp;&nbsp;&nbsp;• <b>Project URL</b> (f.eks. https://abc123.supabase.co)<br>
-          &nbsp;&nbsp;&nbsp;• <b>anon public</b>-nøkkelen under «Project API keys»<br>
-          <b>6.</b> Lim inn over og klikk «💾 Koble til»<br>
-          <b>7.</b> Klikk «📤 Migrer lokale data» for å flytte eksisterende emner og svar til databasen<br>
-          <b>8.</b> Klikk «⬇️ Last ned fil med nøkkel innbakt» og last opp til GitHub Pages
-          <div style="margin-top:0.75rem;">
-            <button onclick="copyDbSchema()" style="background:#059669;color:white;border:none;padding:7px 16px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.8rem;cursor:pointer;">📋 Kopier SQL-skjema</button>
+      <!-- Diagnose log -->
+      <div id="dbDiagnosePanel" style="display:none;background:#0f172a;border-radius:12px;padding:1rem;margin-bottom:0.875rem;max-height:320px;overflow-y:auto;">
+        <div style="font-family:monospace;font-size:0.75rem;" id="dbDiagnoseLog"></div>
+      </div>
+
+      <div id="dbFeedback" style="display:none;padding:0.6rem 0.875rem;border-radius:10px;font-size:0.85rem;font-weight:700;margin-bottom:0.875rem;"></div>
+
+      <details style="margin-top:0.5rem;">
+        <summary style="font-size:0.82rem;font-weight:800;color:#059669;cursor:pointer;">⚙️ Avansert – endre tilkobling</summary>
+        <div style="margin-top:0.75rem;">
+          <div style="margin-bottom:0.6rem;">
+            <label style="display:block;font-size:0.82rem;font-weight:800;color:#555;margin-bottom:0.3rem;">Project URL</label>
+            <input type="text" id="sbUrlInput" placeholder="https://xxxxxxxxxxxx.supabase.co"
+              style="width:100%;padding:9px 12px;border:2px solid #a7f3d0;border-radius:10px;font-family:monospace;font-size:0.82rem;outline:none;box-sizing:border-box;" />
+          </div>
+          <div style="margin-bottom:0.875rem;">
+            <label style="display:block;font-size:0.82rem;font-weight:800;color:#555;margin-bottom:0.3rem;">Anon Public Key</label>
+            <input type="password" id="sbKeyInput" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9…"
+              style="width:100%;padding:9px 12px;border:2px solid #a7f3d0;border-radius:10px;font-family:monospace;font-size:0.82rem;outline:none;box-sizing:border-box;" />
+          </div>
+          <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+            <button onclick="saveDbConfig()" style="background:#059669;color:white;border:none;padding:9px 18px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.85rem;cursor:pointer;">💾 Lagre og koble til</button>
+            <button onclick="clearDbConfig()" style="background:none;border:2px solid #fca5a5;color:var(--c1);padding:9px 14px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.82rem;cursor:pointer;">🗑 Tilbakestill</button>
           </div>
         </div>
       </details>
@@ -1278,7 +1171,7 @@
 <div class="view" id="view-join">
 
   <!-- ══ TEACHER SECTION – only shown when isTeacher=true ══ -->
-  <div id="teacherQuizSection" style="display: block; max-width: 900px; margin: 0px auto 2rem;">
+  <div id="teacherQuizSection" style="display:none;max-width:900px;margin:0 auto 2rem;">
     <div id="crOnlineWarning" style="display:none;background:linear-gradient(135deg,#fff7ed,#ffedd5);border:2px solid #fb923c;border-radius:14px;padding:1rem 1.25rem;margin-bottom:1rem;font-size:0.88rem;line-height:1.7;">
       <b>⚠️ Ingen database koblet til!</b> Live Quiz virker kun på <b>samme nettleser</b> uten Supabase.<br>
       Koble til Supabase under <b>⚙️ Innstillinger → Database</b>.
@@ -1307,7 +1200,7 @@
               <label>Tid per spørsmål (sekunder)</label>
               <select id="crTimeLimit" style="width:160px;padding:12px 14px;border-radius:12px;border:2px solid #e0e0e0;font-family:'Nunito',sans-serif;font-weight:700;font-size:1rem;outline:none;">
                 <option value="10">10 sek</option><option value="15">15 sek</option>
-                <option value="20" selected="">20 sek</option><option value="30">30 sek</option>
+                <option value="20" selected>20 sek</option><option value="30">30 sek</option>
                 <option value="45">45 sek</option><option value="60">60 sek</option>
               </select>
             </div>
@@ -1337,8 +1230,9 @@
               <div id="crAnsweredCount" style="font-size:0.9rem;color:#888;">0 av 0 har svart</div>
               <div style="position:relative;width:52px;height:52px;">
                 <svg width="52" height="52" viewBox="0 0 60 60">
-                  <circle cx="30" cy="30" r="26" fill="none" stroke="#e0e0e0" stroke-width="5"></circle>
-                  <circle id="crTimerCircle" cx="30" cy="30" r="26" fill="none" stroke="var(--c3)" stroke-width="5" stroke-dasharray="188.5" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 30 30)" style="transition:stroke-dashoffset 1s linear;"></circle>
+                  <circle cx="30" cy="30" r="26" fill="none" stroke="#e0e0e0" stroke-width="5"/>
+                  <circle id="crTimerCircle" cx="30" cy="30" r="26" fill="none" stroke="var(--c3)" stroke-width="5"
+                    stroke-dasharray="188.5" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 30 30)" style="transition:stroke-dashoffset 1s linear;"/>
                 </svg>
                 <div id="crTimerText" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Fredoka One',cursive;font-size:1rem;color:var(--dark);">20</div>
               </div>
@@ -1388,14 +1282,14 @@
   </div><!-- /teacherQuizSection -->
 
   <!-- ══ STUDENT / PUBLIC SECTION ══ -->
-  <div id="studentQuizSection" style="display: none;">
+  <div id="studentQuizSection">
     <!-- State: enter code -->
     <div id="sj-enter" style="max-width:400px;margin:2rem auto;text-align:center;">
       <div style="font-size:3rem;margin-bottom:0.5rem;">🎮</div>
       <h2 style="font-family:'Fredoka One',cursive;font-size:2rem;color:var(--dark);margin-bottom:0.5rem;">Bli med i quizen!</h2>
       <p style="color:#888;margin-bottom:1.5rem;">Skriv inn koden du fikk av læreren</p>
       <div class="cr-join-box">
-        <input type="text" id="sjCodeInput" maxlength="4" placeholder="KODE" oninput="this.value=this.value.toUpperCase()">
+        <input type="text" id="sjCodeInput" maxlength="4" placeholder="KODE" oninput="this.value=this.value.toUpperCase()" />
         <button class="btn-primary" style="width:100%;font-size:1.1rem;padding:14px;" id="sjJoinBtn" onclick="sjJoinGame()">🚀 Bli med!</button>
         <div id="sjError" style="display:none;color:var(--c1);font-weight:700;margin-top:0.75rem;font-size:0.9rem;"></div>
       </div>
@@ -1492,8 +1386,8 @@
       <!-- Student name prompt if not logged in -->
       <div id="arbLoginPrompt" style="display:none;background:white;border-radius:20px;padding:1.5rem;box-shadow:var(--shadow);max-width:400px;margin-bottom:1.5rem;">
         <div style="font-weight:800;font-size:1.05rem;color:var(--dark);margin-bottom:1rem;">👤 Hvem er du?</div>
-        <input type="text" id="arbNameInput" placeholder="Ditt navn" style="width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:12px;font-family:'Nunito',sans-serif;font-size:1rem;margin-bottom:0.75rem;outline:none;">
-        <input type="text" id="arbClassInput" placeholder="Klasse (f.eks. 9B)" style="width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:12px;font-family:'Nunito',sans-serif;font-size:1rem;margin-bottom:0.75rem;outline:none;">
+        <input type="text" id="arbNameInput" placeholder="Ditt navn" style="width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:12px;font-family:'Nunito',sans-serif;font-size:1rem;margin-bottom:0.75rem;outline:none;" />
+        <input type="text" id="arbClassInput" placeholder="Klasse (f.eks. 9B)" style="width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:12px;font-family:'Nunito',sans-serif;font-size:1rem;margin-bottom:0.75rem;outline:none;" />
         <button class="btn-primary" style="width:100%;" onclick="arbLogin()">Fortsett →</button>
       </div>
 
@@ -1522,8 +1416,9 @@
         <!-- Progress ring -->
         <div id="arbProgressWrap" style="text-align:center;">
           <svg width="54" height="54" viewBox="0 0 54 54">
-            <circle cx="27" cy="27" r="22" fill="none" stroke="#e0e0e0" stroke-width="5"></circle>
-            <circle cx="27" cy="27" r="22" fill="none" stroke="var(--c3)" stroke-width="5" stroke-linecap="round" stroke-dasharray="138.2" stroke-dashoffset="138.2" id="arbProgressCircle" transform="rotate(-90 27 27)"></circle>
+            <circle cx="27" cy="27" r="22" fill="none" stroke="#e0e0e0" stroke-width="5"/>
+            <circle cx="27" cy="27" r="22" fill="none" stroke="var(--c3)" stroke-width="5" stroke-linecap="round"
+              stroke-dasharray="138.2" stroke-dashoffset="138.2" id="arbProgressCircle" transform="rotate(-90 27 27)"/>
           </svg>
           <div style="font-family:'Fredoka One',cursive;font-size:0.75rem;color:var(--c3);margin-top:-38px;position:relative;z-index:1;" id="arbProgressPct">0%</div>
         </div>
@@ -1542,11 +1437,11 @@
 <div class="modal-overlay" id="teacherModal">
   <div class="modal">
     <h2>🔑 Lærertilgang</h2>
-    <input type="password" id="teacherPass" placeholder="Passord" onkeydown="if(event.key==='Enter')loginTeacher()">
+    <input type="password" id="teacherPass" placeholder="Passord" onkeydown="if(event.key==='Enter')loginTeacher()" />
     <div id="teacherError" style="display:none;color:var(--c1);font-weight:800;font-size:0.88rem;margin-bottom:0.5rem;">❌ Feil passord</div>
     <div class="modal-btns">
       <button class="btn-cancel" onclick="closeModal('teacherModal')">Avbryt</button>
-      <button class="btn-primary" id="teacherLoginBtn" onclick="loginTeacher()" style="display: none;">Logg inn</button>
+      <button class="btn-primary" id="teacherLoginBtn" onclick="loginTeacher()">Logg inn</button>
     </div>
     <p style="font-size:0.8rem;color:#aaa;text-align:center;margin-top:1rem;">Hint: <strong>...</strong></p>
   </div>
@@ -1681,7 +1576,6 @@ function initDark() {
 
 // ====== LOAD / SAVE STATE ======
 async function loadState() {
-  DB.init();
   showDbStatus();
   initDark();
   initMsToken();
@@ -1699,27 +1593,16 @@ async function loadState() {
       showStudentWelcome();
     }
   }
-  // Verify DB connection silently in background and warn if broken
-  if (DB._ready) {
-    DB.testConnection().then(r => {
-      if (!r.ok) {
-        console.warn('DB connection issue:', r.msg);
-        DB._ready = false; // mark as not ready so fallback kicks in
-      }
-    }).catch(() => {});
-  }
 }
 
 async function saveModulesToStorage() {
   const ok = await DB.saveModules(state.modules);
   renderHomeModules();
   renderTaskModules();
-  if (DB._ready) {
-    if (ok) {
-      showToast('✅ ' + state.modules.length + ' emne(r) lagret til sky');
-    } else {
-      showToast('❌ Skylagring feilet – se konsoll (F12) for detaljer');
-    }
+  if (ok) {
+    showToast('✅ ' + state.modules.length + ' emne(r) lagret til Supabase');
+  } else {
+    showToast('⚠️ Lagret lokalt – Supabase ikke nådd. Kjør 🔬 Diagnose i innstillinger.');
   }
 }
 function saveAnswersToStorage() {
@@ -3101,113 +2984,95 @@ if(!document.getElementById('confettiStyle')){const s=document.createElement('st
 // ║  Falls back to localStorage when not configured             ║
 // ╚══════════════════════════════════════════════════════════════╝
 
+// ════════════════════════════════════════════════════════════════
+//  OLASKOLE · DATABASE LAYER
+//  Supabase REST API · localStorage fallback
+//  URL og nøkkel er hardkodet – fungerer på alle enheter uten
+//  noe oppsett fra bruker.
+// ════════════════════════════════════════════════════════════════
+const SB_URL = 'https://uzufgmhuihvjxlvvspwy.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6dWZnbWh1aWh2anhsdnZzcHd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4ODUyMDcsImV4cCI6MjA4ODQ2MTIwN30.V-KC9DMPfwzr94IqLinWqcv_qJ2ofIqFSgLMnQj3Tig';
+
 const DB = {
-  _url:   'https://uzufgmhuihvjxlvvspwy.supabase.co',
-  _key:   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6dWZnbWh1aWh2anhsdnZzcHd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4ODUyMDcsImV4cCI6MjA4ODQ2MTIwN30.V-KC9DMPfwzr94IqLinWqcv_qJ2ofIqFSgLMnQj3Tig',
-  _ready: true,
-  _tablesNotReady: false,
-
-  init() {
-    // Allow settings override stored in localStorage
-    const storedUrl = localStorage.getItem('os_sb_url');
-    const storedKey = localStorage.getItem('os_sb_key');
-    if (storedUrl) this._url = storedUrl;
-    if (storedKey && storedKey.startsWith('eyJ')) this._key = storedKey;
-    this._ready = !!(this._url && this._key && this._key.startsWith('eyJ'));
-    localStorage.setItem('os_sb_url', this._url);
-    localStorage.setItem('os_sb_key', this._key);
-    return this._ready;
-  },
-
-  isReady() { return this._ready; },
-
-  // ── Core fetch wrapper ─────────────────────────────────────
-  async _req(method, path, body) {
-    if (!this._ready) return null;
+  // ── Intern hjelper: send en REST-forespørsel til Supabase ──────────
+  async _q(method, table, params, body) {
+    const url = SB_URL + '/rest/v1/' + table + (params ? '?' + params : '');
     const headers = {
-      'apikey': this._key,
-      'Authorization': 'Bearer ' + this._key,
-      'Content-Type': 'application/json'
+      'apikey':        SB_KEY,
+      'Authorization': 'Bearer ' + SB_KEY,
+      'Content-Type':  'application/json',
+      'Prefer':        (method === 'POST') ? 'resolution=merge-duplicates,return=minimal'
+                     : (method === 'DELETE') ? 'return=minimal'
+                     : ''
     };
-    if (method === 'POST') {
-      headers['Prefer'] = 'resolution=merge-duplicates,return=minimal';
-    } else if (method === 'DELETE') {
-      headers['Prefer'] = 'return=minimal';
-    }
     try {
-      const res = await fetch(this._url + '/rest/v1' + path, {
+      const res = await fetch(url, {
         method,
         headers,
         body: body !== undefined ? JSON.stringify(body) : undefined
       });
-      const text = await res.text();
       if (!res.ok) {
-        let msg = text;
-        try { msg = JSON.parse(text).message || text; } catch(_) {}
-        if (res.status === 404 || msg.includes('does not exist') || msg.includes('42P01')) {
-          console.error('[DB] TABELL MANGLER:', path.split('?')[0], '– Kjør SQL-skjema i Supabase!');
-          this._tablesNotReady = true;
-          return null;
-        }
-        console.error('[DB]', method, path.split('?')[0], res.status, msg.substring(0,200));
+        const err = await res.text();
+        console.error('[DB]', method, table, res.status, err.substring(0, 200));
         return null;
       }
-      this._tablesNotReady = false;
-      if (!text || text === '' || text === 'null') return [];
-      return JSON.parse(text);
-    } catch(e) {
-      console.error('[DB] Fetch-feil:', method, path.split('?')[0], e.message);
+      const text = await res.text();
+      return (text && text !== 'null') ? JSON.parse(text) : [];
+    } catch (e) {
+      console.error('[DB] fetch-feil:', method, table, e.message);
       return null;
     }
   },
 
-  // ── MODULES ────────────────────────────────────────────────
+  // ── MODULER (lærers innhold) ───────────────────────────────────────
   async loadModules() {
-    const cached = () => {
-      try { return JSON.parse(localStorage.getItem('lh_modules') || '[]'); } catch(_) { return []; }
-    };
-    if (!this._ready) return cached();
-    const rows = await this._req('GET', '/os_modules?order=sort_order.asc,created_at.asc&select=id,data,sort_order');
-    if (rows === null) return cached();           // error → use cache
+    const rows = await this._q('GET', 'os_modules', 'order=sort_order.asc,created_at.asc&select=id,data,sort_order');
+    if (rows === null) {
+      // DB feil – bruk lokal cache
+      try { return JSON.parse(localStorage.getItem('lh_modules') || '[]'); } catch { return []; }
+    }
     const mods = rows.map(r => r.data).filter(Boolean);
     localStorage.setItem('lh_modules', JSON.stringify(mods));
     return mods;
   },
 
   async saveModules(modules) {
-    // Assign stable IDs
+    // Tildel stabile IDer
     modules.forEach((m, i) => {
-      if (!m._id) m._id = 'mod_' + Date.now() + '_' + i + '_' + Math.random().toString(36).slice(2,6);
+      if (!m._id) m._id = 'mod_' + Date.now() + '_' + i + '_' + Math.random().toString(36).slice(2, 7);
     });
     localStorage.setItem('lh_modules', JSON.stringify(modules));
-    if (!this._ready) return false;
 
-    // Upsert all rows (one by one to avoid payload issues)
+    // Upsert én og én
     for (let i = 0; i < modules.length; i++) {
       const m = modules[i];
-      const result = await this._req('POST', '/os_modules', [{ id: m._id, data: m, sort_order: i }]);
-      if (result === null) {
+      const ok = await this._q('POST', 'os_modules', null, [{ id: m._id, data: m, sort_order: i }]);
+      if (ok === null) {
         console.error('[DB] saveModules: upsert feilet for', m._id);
         return false;
       }
     }
 
-    // Delete rows that are no longer in the list
+    // Slett moduler som ikke lenger finnes
     if (modules.length > 0) {
       const ids = modules.map(m => m._id).join(',');
-      await this._req('DELETE', '/os_modules?id=not.in.(' + ids + ')');
+      await this._q('DELETE', 'os_modules', 'id=not.in.(' + ids + ')');
     } else {
-      await this._req('DELETE', '/os_modules?sort_order=gte.0');
+      await this._q('DELETE', 'os_modules', 'sort_order=gte.0');
     }
     return true;
   },
 
-  // ── STUDENT ANSWERS ────────────────────────────────────────
+  // ── ELEVSVAR ──────────────────────────────────────────────────────
   async loadAnswers(studentName) {
-    const cached = () => { try { return JSON.parse(localStorage.getItem('lh_answers') || '{}'); } catch(_) { return {}; } };
-    if (!this._ready || !studentName) return cached();
-    const rows = await this._req('GET', '/os_answers?student_name=eq.' + encodeURIComponent(studentName) + '&select=answer_key,value,correct');
-    if (rows === null) return cached();
+    if (!studentName) {
+      try { return JSON.parse(localStorage.getItem('lh_answers') || '{}'); } catch { return {}; }
+    }
+    const rows = await this._q('GET', 'os_answers',
+      'student_name=eq.' + encodeURIComponent(studentName) + '&select=answer_key,value,correct');
+    if (rows === null) {
+      try { return JSON.parse(localStorage.getItem('lh_answers') || '{}'); } catch { return {}; }
+    }
     const obj = {};
     rows.forEach(r => { obj[r.answer_key] = { val: r.value, correct: r.correct }; });
     localStorage.setItem('lh_answers', JSON.stringify(obj));
@@ -3218,8 +3083,8 @@ const DB = {
     const local = JSON.parse(localStorage.getItem('lh_answers') || '{}');
     local[answerKey] = { val, correct: !!correct };
     localStorage.setItem('lh_answers', JSON.stringify(local));
-    if (!this._ready || !studentName) return;
-    await this._req('POST', '/os_answers', [{
+    if (!studentName) return;
+    await this._q('POST', 'os_answers', null, [{
       answer_key:    answerKey,
       student_name:  studentName,
       student_class: studentClass || '',
@@ -3229,9 +3094,9 @@ const DB = {
     }]);
   },
 
-  // ── PROGRESS ───────────────────────────────────────────────
+  // ── FREMDRIFT (arbeid-svar) ───────────────────────────────────────
   async loadProgress(studentName) {
-    if (!this._ready || !studentName) {
+    if (!studentName) {
       const prog = {};
       for (let i = 0; i < localStorage.length; i++) {
         const k = localStorage.key(i);
@@ -3239,7 +3104,8 @@ const DB = {
       }
       return prog;
     }
-    const rows = await this._req('GET', '/os_progress?student_name=eq.' + encodeURIComponent(studentName) + '&select=progress_key,value');
+    const rows = await this._q('GET', 'os_progress',
+      'student_name=eq.' + encodeURIComponent(studentName) + '&select=progress_key,value');
     if (!rows) return {};
     const obj = {};
     rows.forEach(r => { obj[r.progress_key] = r.value; localStorage.setItem(r.progress_key, r.value); });
@@ -3248,8 +3114,8 @@ const DB = {
 
   async saveProgress(studentName, studentClass, progressKey, value) {
     localStorage.setItem(progressKey, String(value));
-    if (!this._ready || !studentName) return;
-    await this._req('POST', '/os_progress', [{
+    if (!studentName) return;
+    await this._q('POST', 'os_progress', null, [{
       progress_key:  progressKey,
       student_name:  studentName,
       student_class: studentClass || '',
@@ -3258,33 +3124,29 @@ const DB = {
     }]);
   },
 
-  // ── FEEDBACK ───────────────────────────────────────────────
+  // ── TILBAKEMELDINGER ──────────────────────────────────────────────
   async saveFeedback(key, text) {
     localStorage.setItem('feedback_' + key, text);
-    if (!this._ready) return;
-    await this._req('POST', '/os_feedback', [{ feedback_key: key, text, updated_at: new Date().toISOString() }]);
+    await this._q('POST', 'os_feedback', null, [{ feedback_key: key, text, updated_at: new Date().toISOString() }]);
   },
 
   async loadFeedback(key) {
-    if (!this._ready) return localStorage.getItem('feedback_' + key) || '';
-    const rows = await this._req('GET', '/os_feedback?feedback_key=eq.' + encodeURIComponent(key) + '&select=text');
+    const rows = await this._q('GET', 'os_feedback', 'feedback_key=eq.' + encodeURIComponent(key) + '&select=text');
     if (!rows || !rows.length) return localStorage.getItem('feedback_' + key) || '';
     return rows[0].text || '';
   },
 
   async deleteFeedback(key) {
     localStorage.removeItem('feedback_' + key);
-    if (!this._ready) return;
-    await this._req('DELETE', '/os_feedback?feedback_key=eq.' + encodeURIComponent(key));
+    await this._q('DELETE', 'os_feedback', 'feedback_key=eq.' + encodeURIComponent(key));
   },
 
-  // ── ROSTER ─────────────────────────────────────────────────
+  // ── ELEVLISTE ─────────────────────────────────────────────────────
   async loadRoster() {
-    const cached = () => { try { return JSON.parse(localStorage.getItem('olaskole_roster') || '[]'); } catch(_) { return []; } };
-    if (!this._ready) return cached();
-    const rows = await this._req('GET', '/os_roster?select=id,data&order=created_at.asc');
-    if (!rows) return cached();
-    if (rows.length === 0) return cached();
+    const rows = await this._q('GET', 'os_roster', 'select=id,data&order=created_at.asc');
+    if (!rows || rows.length === 0) {
+      try { return JSON.parse(localStorage.getItem('olaskole_roster') || '[]'); } catch { return []; }
+    }
     const roster = rows.map(r => r.data);
     localStorage.setItem('olaskole_roster', JSON.stringify(roster));
     return roster;
@@ -3292,63 +3154,63 @@ const DB = {
 
   async saveRoster(roster) {
     localStorage.setItem('olaskole_roster', JSON.stringify(roster));
-    if (!this._ready) return;
-    await this._req('DELETE', '/os_roster?id=neq.___placeholder___');
+    await this._q('DELETE', 'os_roster', 'id=neq.___none___');
     if (roster.length) {
       const rows = roster.map((s, i) => ({
-        id: 'r_' + i + '_' + String(s.name || i).toLowerCase().replace(/[^a-z0-9]/g,'_').substring(0,30),
+        id: 'r_' + String(s.name || i).toLowerCase().replace(/[^a-z0-9]/g, '_').substring(0, 30) + '_' + i,
         data: s,
         created_at: new Date().toISOString()
       }));
-      await this._req('POST', '/os_roster', rows);
+      await this._q('POST', 'os_roster', null, rows);
     }
   },
 
-  // ── HIGHSCORES ─────────────────────────────────────────────
+  // ── HIGH SCORES ───────────────────────────────────────────────────
   async saveHighscores(quizName, players, questionCount) {
-    if (!this._ready) return;
     const rows = Object.values(players).map(p => ({
-      id: quizName.replace(/[^a-z0-9]/gi,'_').substring(0,30) + '_' + String(p.username||'').replace(/[^a-z0-9]/gi,'_').substring(0,20) + '_' + Date.now(),
+      id: quizName.replace(/[^a-z0-9]/gi, '_').substring(0, 30)
+        + '_' + String(p.username || '').replace(/[^a-z0-9]/gi, '_').substring(0, 20)
+        + '_' + Date.now(),
       quiz_name:   quizName,
       player_name: p.username || 'Ukjent',
       score:       p.score || 0,
       questions:   questionCount || 0,
       played_at:   new Date().toISOString()
     }));
-    if (rows.length) await this._req('POST', '/os_highscores', rows);
+    if (rows.length) await this._q('POST', 'os_highscores', null, rows);
   },
 
   async loadHighscores(quizName) {
-    if (!this._ready) return [];
-    const filter = quizName ? '?quiz_name=eq.' + encodeURIComponent(quizName) + '&order=score.desc&limit=100' : '?order=score.desc&limit=200';
-    const rows = await this._req('GET', '/os_highscores' + filter + '&select=id,quiz_name,player_name,score,questions,played_at');
+    const filter = quizName
+      ? 'quiz_name=eq.' + encodeURIComponent(quizName) + '&order=score.desc&limit=100'
+      : 'order=score.desc&limit=200';
+    const rows = await this._q('GET', 'os_highscores', filter + '&select=id,quiz_name,player_name,score,questions,played_at');
     return rows || [];
   },
 
   async deleteHighscore(id) {
-    if (!this._ready) return;
-    await this._req('DELETE', '/os_highscores?id=eq.' + encodeURIComponent(id));
+    await this._q('DELETE', 'os_highscores', 'id=eq.' + encodeURIComponent(id));
   },
 
-  // ── GAMES (Live Quiz) ──────────────────────────────────────
+  // ── LIVE QUIZ ─────────────────────────────────────────────────────
+  // (brukes av GAME-objektet nedenfor)
+
+  // ── DIAGNOSTIKK ───────────────────────────────────────────────────
   async testConnection() {
-    if (!this._ready) return { ok: false, msg: 'Ikke konfigurert' };
     try {
-      const ping = await fetch(this._url + '/rest/v1/', {
-        headers: { 'apikey': this._key, 'Authorization': 'Bearer ' + this._key }
+      const res = await fetch(SB_URL + '/rest/v1/', {
+        headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
       });
-      if (!ping.ok) {
-        if (ping.status === 401) return { ok: false, msg: '❌ Ugyldig API-nøkkel (401).' };
-        return { ok: false, msg: '❌ HTTP ' + ping.status };
-      }
-    } catch(e) {
-      return { ok: false, msg: '❌ Nettverksfeil: ' + e.message };
+      if (!res.ok) return { ok: false, msg: '❌ HTTP ' + res.status + ' – sjekk nøkkel/URL' };
+    } catch (e) {
+      return { ok: false, msg: '❌ Kan ikke nå Supabase: ' + e.message };
     }
-    const rows = await this._req('GET', '/os_modules?limit=1&select=id');
-    if (rows === null) return { ok: false, msg: '⚠️ Tilkoblet, men tabellene mangler! Kjør SQL-skjemaet.' };
-    return { ok: true, msg: '✅ Alt OK! Supabase tilkoblet, ' + rows.length + ' emne(r) i database.' };
+    const rows = await this._q('GET', 'os_modules', 'limit=1&select=id');
+    if (rows === null) return { ok: false, msg: '⚠️ Tilkoblet, men tabellene mangler. Kjør SQL-skjemaet!' };
+    return { ok: true, msg: '✅ Tilkoblet og klar! (' + rows.length + ' emne(r) i database)' };
   }
 };
+
 
 // ── Progress cache (populated on student login) ────────────────
 let _progressCache = {};
@@ -3373,67 +3235,69 @@ function getRosterSync() { return _rosterCache; }
 //  DATABASE SETTINGS UI  –  Supabase
 // ════════════════════════════════════════════════════════
 
-const DB_SQL_SCHEMA = `-- OlaSkole – Supabase SQL-skjema
--- Kjør dette i Supabase SQL Editor.
--- Trygt å kjøre flere ganger (bruker IF NOT EXISTS).
+const DB_SQL_SCHEMA = `-- ============================================================
+-- OlaSkole – Supabase oppsett
+-- Lim inn ALT dette i SQL Editor og trykk RUN.
+-- Trygt å kjøre flere ganger.
+-- ============================================================
 
--- ── Tabeller ──────────────────────────────────────────────────────
-
+-- TABELLER
 create table if not exists os_modules (
-  id           text primary key,
-  data         jsonb not null,
-  sort_order   int default 0,
-  created_at   timestamptz default now()
+  id text primary key,
+  data jsonb not null,
+  sort_order int default 0,
+  created_at timestamptz default now()
 );
 
 create table if not exists os_answers (
-  answer_key    text primary key,
-  student_name  text not null,
+  answer_key text primary key,
+  student_name text not null,
   student_class text default '',
-  value         text,
-  correct       boolean default false,
-  updated_at    timestamptz default now()
+  value text,
+  correct boolean default false,
+  updated_at timestamptz default now()
 );
-create index if not exists os_answers_student on os_answers(student_name);
 
 create table if not exists os_progress (
-  progress_key  text primary key,
-  student_name  text not null,
+  progress_key text primary key,
+  student_name text not null,
   student_class text default '',
-  value         text,
-  updated_at    timestamptz default now()
+  value text,
+  updated_at timestamptz default now()
 );
-create index if not exists os_progress_student on os_progress(student_name);
 
 create table if not exists os_feedback (
-  feedback_key  text primary key,
-  text          text,
-  updated_at    timestamptz default now()
+  feedback_key text primary key,
+  text text,
+  updated_at timestamptz default now()
 );
 
 create table if not exists os_roster (
-  id         text primary key,
-  data       jsonb not null,
+  id text primary key,
+  data jsonb not null,
   created_at timestamptz default now()
 );
 
 create table if not exists os_games (
-  code       text primary key,
-  data       jsonb not null,
+  code text primary key,
+  data jsonb not null,
   updated_at timestamptz default now()
 );
 
 create table if not exists os_highscores (
-  id            text primary key,
-  quiz_name     text not null,
-  player_name   text not null,
-  score         int not null,
-  questions     int default 0,
-  played_at     timestamptz default now()
+  id text primary key,
+  quiz_name text not null,
+  player_name text not null,
+  score int not null,
+  questions int default 0,
+  played_at timestamptz default now()
 );
 
--- ── Row Level Security ────────────────────────────────────────────
+-- INDEXES
+create index if not exists idx_answers_student  on os_answers(student_name);
+create index if not exists idx_progress_student on os_progress(student_name);
 
+-- ROW LEVEL SECURITY (aktiver for alle tabeller)
 alter table os_modules    enable row level security;
 alter table os_answers    enable row level security;
 alter table os_progress   enable row level security;
@@ -3442,25 +3306,22 @@ alter table os_roster     enable row level security;
 alter table os_games      enable row level security;
 alter table os_highscores enable row level security;
 
--- ── Policies (drop + recreate = trygt å kjøre på nytt) ───────────
+-- POLICIES (slett gamle og lag nye – trygt å kjøre på nytt)
+drop policy if exists "allow_all_modules"    on os_modules;
+drop policy if exists "allow_all_answers"    on os_answers;
+drop policy if exists "allow_all_progress"   on os_progress;
+drop policy if exists "allow_all_feedback"   on os_feedback;
+drop policy if exists "allow_all_roster"     on os_roster;
+drop policy if exists "allow_all_games"      on os_games;
+drop policy if exists "allow_all_highscores" on os_highscores;
 
-do $$ begin
-  drop policy if exists "allow_all_modules"    on os_modules;
-  drop policy if exists "allow_all_answers"    on os_answers;
-  drop policy if exists "allow_all_progress"   on os_progress;
-  drop policy if exists "allow_all_feedback"   on os_feedback;
-  drop policy if exists "allow_all_roster"     on os_roster;
-  drop policy if exists "allow_all_games"      on os_games;
-  drop policy if exists "allow_all_highscores" on os_highscores;
-end $$;
-
-create policy "allow_all_modules"    on os_modules    for all using (true) with check (true);
-create policy "allow_all_answers"    on os_answers    for all using (true) with check (true);
-create policy "allow_all_progress"   on os_progress   for all using (true) with check (true);
-create policy "allow_all_feedback"   on os_feedback   for all using (true) with check (true);
-create policy "allow_all_roster"     on os_roster     for all using (true) with check (true);
-create policy "allow_all_games"      on os_games      for all using (true) with check (true);
-create policy "allow_all_highscores" on os_highscores for all using (true) with check (true);
+create policy "allow_all_modules"    on os_modules    for all to anon using (true) with check (true);
+create policy "allow_all_answers"    on os_answers    for all to anon using (true) with check (true);
+create policy "allow_all_progress"   on os_progress   for all to anon using (true) with check (true);
+create policy "allow_all_feedback"   on os_feedback   for all to anon using (true) with check (true);
+create policy "allow_all_roster"     on os_roster     for all to anon using (true) with check (true);
+create policy "allow_all_games"      on os_games      for all to anon using (true) with check (true);
+create policy "allow_all_highscores" on os_highscores for all to anon using (true) with check (true);
 `;
 
 function copyDbSchema() {
@@ -3483,7 +3344,6 @@ async function saveDbConfig() {
   if (!url || !key) { showDbFeedback('Fyll inn både Project URL og API-nøkkel', false); return; }
   localStorage.setItem('os_sb_url', url);
   localStorage.setItem('os_sb_key', key);
-  DB.init();
   showDbFeedback('⏳ Tester tilkobling…', true);
   const result = await DB.testConnection();
   showDbStatus();
@@ -3526,7 +3386,7 @@ async function saveKeyToFile() {
   }
   let src = document.documentElement.outerHTML;
   // Replace the EMBEDDED_KEY placeholder
-  src = src.replace("const EMBEDDED_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6dWZnbWh1aWh2anhsdnZzcHd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4ODUyMDcsImV4cCI6MjA4ODQ2MTIwN30.V-KC9DMPfwzr94IqLinWqcv_qJ2ofIqFSgLMnQj3Tig';", "const EMBEDDED_KEY = '" + key + "';");
+  src = src.replace("const EMBEDDED_KEY = '';", "const EMBEDDED_KEY = '" + key + "';");
   src = src.replace("const EMBEDDED_URL = 'https://uzufgmhuihvjxlvvspwy.supabase.co';", "const EMBEDDED_URL = '" + url + "';" );
   const blob = new Blob([src], { type: 'text/html' });
   const a = document.createElement('a');
@@ -3538,9 +3398,12 @@ async function saveKeyToFile() {
 }
 
 async function testDbConnection() {
-  DB.init();
+  showDbFeedback('⏳ Tester…', true);
   const result = await DB.testConnection();
-  showDbFeedback(result.ok ? '✅ ' + result.msg : result.msg, result.ok);
+  showDbFeedback(result.msg, result.ok);
+  // Vis/skjul SQL-advarsel
+  const warn = document.getElementById('dbSqlWarning');
+  if (warn) warn.style.display = (!result.ok && result.msg.includes('tabellene mangler')) ? 'block' : 'none';
 }
 
 async function runDbDiagnose() {
@@ -3556,16 +3419,15 @@ async function runDbDiagnose() {
   };
 
   dlog('🔬 OlaSkole DB Diagnose', '#FFD93D');
-  dlog('URL: ' + DB._url, '#aaa');
-  dlog('Nøkkel: ' + DB._key.substring(0,20) + '...', '#aaa');
-  dlog('_ready: ' + DB._ready, DB._ready ? '#6BCB77' : '#FF6B6B');
+  dlog('URL: ' + SB_URL, '#aaa');
+  dlog('Nøkkel: ' + SB_KEY.substring(0,20) + '...', '#aaa');
   dlog('─────────────────────────────');
 
   // TEST 1: Grunnleggende tilkobling
   dlog('TEST 1: Tilkobling...', '#FFD93D');
   try {
-    const r = await fetch(DB._url + '/rest/v1/', {
-      headers: { 'apikey': DB._key, 'Authorization': 'Bearer ' + DB._key }
+    const r = await fetch(SB_URL + '/rest/v1/', {
+      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
     });
     if (r.ok || r.status === 200) {
       dlog('TEST 1: ✅ Tilkoblet (HTTP ' + r.status + ')', '#6BCB77');
@@ -3581,7 +3443,7 @@ async function runDbDiagnose() {
 
   // TEST 2: Les moduler
   dlog('TEST 2: Leser os_modules...', '#FFD93D');
-  const rows = await DB._req('GET', '/os_modules?select=id,sort_order&order=sort_order.asc');
+  const rows = await DB._q('GET', 'os_modules', 'select=id,sort_order&order=sort_order.asc');
   if (rows === null) {
     dlog('TEST 2: ❌ Lesing feilet – tabell mangler eller RLS blokkerer', '#FF6B6B');
     dlog('  → Kjør SQL-skjemaet i Supabase SQL Editor!', '#FFD93D');
@@ -3593,17 +3455,17 @@ async function runDbDiagnose() {
   // TEST 3: Skriv en rad
   dlog('TEST 3: Skriver testrad...', '#FFD93D');
   const tid = 'diag_' + Date.now();
-  const wr = await DB._req('POST', '/os_modules', [{ id: tid, data: { name: 'DIAGNOSETEST', _id: tid }, sort_order: 9999 }]);
+  const wr = await DB._q('POST', 'os_modules', null, [{ id: tid, data: { name: 'DIAGNOSETEST', _id: tid }, sort_order: 9999 }]);
   if (wr === null) {
     dlog('TEST 3: ❌ Skriving feilet!', '#FF6B6B');
     dlog('  → RLS policy mangler (kjør SQL-skjema) eller nøkkel har ikke skrivetilgang', '#FFD93D');
   } else {
     dlog('TEST 3: ✅ Skriving OK', '#6BCB77');
     // Read back
-    const rb = await DB._req('GET', '/os_modules?id=eq.' + tid + '&select=id');
+    const rb = await DB._q('GET', 'os_modules', 'id=eq.' + tid + '&select=id');
     dlog('TEST 3b: Les tilbake: ' + (rb && rb.length ? '✅ OK' : '❌ Ikke funnet'), rb && rb.length ? '#6BCB77' : '#FF6B6B');
     // Cleanup
-    await DB._req('DELETE', '/os_modules?id=eq.' + tid);
+    await DB._q('DELETE', 'os_modules', 'id=eq.' + tid);
     dlog('TEST 3c: ✅ Opprydding OK', '#6BCB77');
   }
 
@@ -3611,7 +3473,7 @@ async function runDbDiagnose() {
   dlog('TEST 4: Sjekker alle tabeller...', '#FFD93D');
   const tables = ['os_modules','os_answers','os_progress','os_feedback','os_roster','os_games','os_highscores'];
   for (const t of tables) {
-    const r = await DB._req('GET', '/' + t + '?select=*&limit=0');
+    const r = await DB._q('GET', t, 'select=*&limit=0');
     dlog('  ' + t + ': ' + (r !== null ? '✅' : '❌ MANGLER – kjør SQL!'), r !== null ? '#6BCB77' : '#FF6B6B');
   }
 
@@ -3620,7 +3482,7 @@ async function runDbDiagnose() {
 }
 
 async function migrateToDb() {
-  if (!DB.isReady()) { showDbFeedback('❌ Koble til Supabase først', false); return; }
+  // DB er alltid klar (nøkkel er hardkodet)
   showDbFeedback('⏳ Migrerer lokale data til Supabase…', true);
 
   const localMods = JSON.parse(localStorage.getItem('lh_modules') || '[]');
@@ -3653,7 +3515,7 @@ function clearDbConfig() {
   if (!confirm('Fjerne Supabase-tilkobling? Data i databasen beholdes.')) return;
   localStorage.removeItem('os_sb_url');
   localStorage.removeItem('os_sb_key');
-  DB._ready = false; DB._url = null; DB._key = null;
+  showToast('⚠️ URL/nøkkel er hardkodet i filen – kan ikke fjernes herfra');
   showDbStatus();
   showDbFeedback('Tilkobling fjernet. Bruker lokal lagring.', true);
 }
@@ -3670,33 +3532,17 @@ function showDbFeedback(msg, ok) {
 function showDbStatus() {
   const el = document.getElementById('dbStatus');
   if (!el) return;
-  const url = localStorage.getItem('os_sb_url');
-  const key = localStorage.getItem('os_sb_key');
-
+  const short = SB_URL.replace('https://', '').split('.')[0];
+  el.style.background = '#dcfce7';
+  el.style.color = '#166534';
+  el.textContent = '✅ Supabase: ' + short + '.supabase.co – kjør 🔬 Diagnose for å verifisere';
+  // Fyll inn URL/nøkkel i input-feltene for avansert seksjon
   const ui = document.getElementById('sbUrlInput');
   const ki = document.getElementById('sbKeyInput');
-  if (ui && !ui.value && url) ui.value = url;
-  if (ki && !ki.value && key) ki.value = key;
-
-  if (url && key) {
-    const short = url.replace('https://', '').split('.')[0];
-    el.style.background = '#dcfce7'; el.style.color = '#166534';
-    el.textContent = DB._tablesNotReady
-      ? '⚠️ Tilkoblet, men SQL-skjema ikke kjørt ennå!'
-      : '✅ Tilkoblet: ' + short + '.supabase.co';
-    el.style.background = DB._tablesNotReady ? '#fff7ed' : '#dcfce7';
-    el.style.color = DB._tablesNotReady ? '#92400e' : '#166534';
-  } else {
-    el.style.background = '#fff7ed'; el.style.color = '#92400e';
-    el.textContent = '⚠️ Ikke konfigurert – bruker lokal lagring (data deles ikke mellom enheter)';
-  }
-
+  if (ui && !ui.value) ui.value = SB_URL;
+  if (ki && !ki.value) ki.value = SB_KEY;
   const pill = document.getElementById('dbNavPill');
-  if (pill) {
-    pill.style.display = 'inline-block';
-    pill.style.background = (url && key) ? '#059669' : '#f59e0b';
-    pill.title = (url && key) ? 'Database: Supabase tilkoblet' : 'Database: ikke konfigurert';
-  }
+  if (pill) { pill.style.display = 'inline-block'; pill.style.background = '#059669'; pill.title = 'Database: Supabase tilkoblet'; }
 }
 
 
@@ -3838,25 +3684,19 @@ let sjGame = null; // student game state
 // ════════════════════════════════════════════════════════════
 const GAME = {
   async save(code, data) {
-    localStorage.setItem('cr_game', JSON.stringify(data)); // always local backup
-    if (!DB.isReady()) return;
-    await DB._req('POST', '/os_games', [{
-      code: code,
-      data: data,
-      updated_at: new Date().toISOString()
-    }]);
+    localStorage.setItem('cr_game', JSON.stringify(data));
+    await DB._q('POST', 'os_games', null, [{ code, data, updated_at: new Date().toISOString() }]);
   },
 
   async load(code) {
-    if (!DB.isReady()) {
+    const rows = await DB._q('GET', 'os_games', 'code=eq.' + encodeURIComponent(code) + '&select=data,updated_at&limit=1');
+    if (!rows || !rows.length) {
+      // Fallback til localStorage
       const raw = localStorage.getItem('cr_game');
       if (!raw) return null;
       const d = JSON.parse(raw);
       return d.code === code ? d : null;
     }
-    const rows = await DB._req('GET', `/os_games?code=eq.${encodeURIComponent(code)}&select=data,updated_at&limit=1`);
-    if (!rows || !rows.length) return null;
-    // Check freshness - games older than 3 hours are stale
     const age = Date.now() - new Date(rows[0].updated_at).getTime();
     if (age > 3 * 60 * 60 * 1000) return null;
     return rows[0].data;
@@ -3864,8 +3704,7 @@ const GAME = {
 
   async delete(code) {
     localStorage.removeItem('cr_game');
-    if (!DB.isReady()) return;
-    await DB._req('DELETE', `/os_games?code=eq.${encodeURIComponent(code)}`);
+    await DB._q('DELETE', 'os_games', 'code=eq.' + encodeURIComponent(code));
   }
 };
 
@@ -4443,11 +4282,6 @@ async function crCreateGame() {
   crShow('lobby-view');
   document.getElementById('crCodeDisplay').textContent = code;
 
-  // Check if Supabase is configured
-  if (!DB.isReady()) {
-    const warning = document.getElementById('crOnlineWarning');
-    if (warning) warning.style.display = 'block';
-  }
   await GAME.save(code, remoteData);
   crStartPolling();
 }
@@ -4965,7 +4799,5 @@ const SND = (() => {
 })();
 
 </script>
-
-
-<div id="globalToast" class="toast">✅ Alle lokale data er nå i Supabase!</div>
-</body></html>
+</body>
+</html>
